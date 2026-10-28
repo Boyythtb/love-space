@@ -68,6 +68,6 @@
    - **Build output directory:** *Để trống* (hoặc điền `/` hoặc `.`)
 6. Nhấn nút **Save and Deploy**.
 7. Chờ khoảng 10-30 giây, Cloudflare Pages sẽ cấp cho bạn một tên miền HTTPS miễn phí cực nhanh dạng:
-   👉 `https://love-space.pages.dev`
+   👉 `https://love-space-bnp.pages.dev`
 
 > **Lưu ý:** Giao thức HTTPS từ Cloudflare Pages là điều kiện bắt buộc để các tính năng PWA (cài app vào màn hình chính), thông báo đẩy Web Push Notifications, và định vị GPS hoạt động ổn định trên cả iPhone (iOS Safari) và Android (Chrome).
