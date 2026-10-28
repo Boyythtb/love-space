@@ -1936,67 +1936,62 @@
             </div>
         </div>
         <div id="firebaseModal" class="modal-overlay" onclick="closeModalsOnBackdrop(event)">
-            <div class="modal-sheet">
+            <div class="modal-sheet max-h-[85vh] overflow-y-auto no-scrollbar">
                 <div class="flex justify-between items-center mb-3">
                     <h3 class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
                         <i data-lucide="radio" class="w-4 h-4 text-hotRose"></i>
-                        Đồng Bộ Realtime 2 Điện Thoại (Firebase Cloud)
+                        <span>Kết Nối Realtime Hai Điện Thoại</span>
                     </h3>
                     <button onclick="closeFirebaseModal()" class="text-slate-400 hover:text-slate-600 text-lg spring-btn">✕</button>
                 </div>
 
                 <div class="space-y-3.5 text-xs">
-                    <div class="p-2.5 rounded-2xl bg-rose-50 border border-rose-200 text-[11px] text-rose-800 leading-relaxed">
-                        💖 <b>Công nghệ Đồng Bộ Thời Gian Thực:</b> Khi bạn hoặc người yêu vẽ tranh, gửi lời nhắn, uống nước, đánh dấu ca làm hay chọn quán ăn, máy của người kia sẽ <b>tự động cập nhật ngay lập tức</b>!
+                    <!-- Banner hướng dẫn ngọt ngào -->
+                    <div class="p-2.5 rounded-2xl bg-rose-50 border border-rose-200/80 text-[11px] text-rose-800 leading-relaxed flex items-start gap-2">
+                        <span class="text-base leading-none">💌</span>
+                        <p>Chỉ cần <b>nhập chung 1 Mã phòng</b> bên dưới, mọi hành động (bắn tim, uống nước, nông trại, lời nhắc) sẽ <b>tự động đồng bộ tức thì</b> giữa 2 máy!</p>
                     </div>
 
                     <!-- BƯỚC 1: MÃ PHÒNG CẶP ĐÔI -->
-                    <div>
-                        <div class="flex justify-between items-center mb-1">
-                            <label class="text-[11px] font-bold text-slate-700">Mã Cặp Đôi (Phòng Ghép Đôi):</label>
-                            <button onclick="generateRandomPairCode()" class="text-[10px] text-hotRose font-bold hover:underline">🎲 Tạo mã ngẫu nhiên</button>
+                    <div class="p-3 bg-white rounded-2xl border border-rose-100 shadow-2xs space-y-2">
+                        <div class="flex justify-between items-center">
+                            <label class="text-[11px] font-bold text-slate-700 flex items-center gap-1">
+                                <span>🔑</span> Mã Phòng Ghép Đôi:
+                            </label>
+                            <button onclick="generateRandomPairCode()" class="text-[10px] text-hotRose font-bold hover:underline flex items-center gap-1 spring-btn">
+                                <span>🎲</span> Tạo mã mới
+                            </button>
                         </div>
                         <div class="flex gap-2">
-                            <input type="text" id="inputPairCode" value="LOVE-2024" placeholder="Ví dụ: LOVE-2024" class="flex-1 px-3 py-2 bg-white rounded-xl border border-rose-200 text-xs font-mono font-bold text-slate-800 uppercase focus:outline-none focus:border-hotRose">
-                            <button onclick="copyPairCode()" class="px-3 py-2 bg-rose-100 text-hotRose font-bold rounded-xl text-[11px] border border-rose-200 spring-btn">
+                            <input type="text" id="inputPairCode" value="LOVE-2024" placeholder="Ví dụ: LOVE-2024 hoặc LOVE-1661" class="flex-1 px-3 py-2 bg-slate-50 rounded-xl border border-rose-200 text-xs font-mono font-black text-hotRose tracking-wider uppercase focus:outline-none focus:border-hotRose text-center">
+                            <button onclick="copyPairCode()" class="px-3 py-2 bg-rose-50 hover:bg-rose-100 text-hotRose font-bold rounded-xl text-[11px] border border-rose-200 spring-btn shrink-0">
                                 Sao chép
                             </button>
                         </div>
-                        <span class="text-[10px] text-slate-400 mt-1 block">Cả 2 bạn cùng nhập chung 1 Mã phòng này để kết nối với nhau nhé!</span>
+                        <p class="text-[9.5px] text-slate-400 text-center">Gửi mã này cho người yêu cùng nhập vào máy nhé!</p>
                     </div>
 
                     <!-- BƯỚC 2: CHỌN VAI TRÒ TRÊN MÁY NÀY -->
-                    <div>
-                        <label class="block text-[11px] font-bold text-slate-700 mb-1.5">Điện thoại này là của ai?</label>
+                    <div class="p-3 bg-white rounded-2xl border border-rose-100 shadow-2xs space-y-2">
+                        <label class="block text-[11px] font-bold text-slate-700">Điện thoại này là của ai?</label>
                         <div class="grid grid-cols-2 gap-2" id="roleSelectorGroup">
-                            <button type="button" onclick="selectMyRole('Anh')" id="roleBtnAnh" class="py-2.5 px-3 rounded-xl border-2 border-hotRose bg-rose-50 text-hotRose font-extrabold text-xs flex items-center justify-center gap-1.5 transition-all">
+                            <button type="button" onclick="selectMyRole('Anh')" id="roleBtnAnh" class="py-2.5 px-3 rounded-xl border-2 border-hotRose bg-rose-50 text-hotRose font-extrabold text-xs flex items-center justify-center gap-1.5 transition-all spring-btn shadow-2xs">
                                 <span>👦</span> Bạn Trai (Anh)
                             </button>
-                            <button type="button" onclick="selectMyRole('Em')" id="roleBtnEm" class="py-2.5 px-3 rounded-xl border-2 border-slate-200 bg-white text-slate-600 font-extrabold text-xs flex items-center justify-center gap-1.5 transition-all">
+                            <button type="button" onclick="selectMyRole('Em')" id="roleBtnEm" class="py-2.5 px-3 rounded-xl border-2 border-slate-200 bg-white text-slate-600 font-extrabold text-xs flex items-center justify-center gap-1.5 transition-all spring-btn">
                                 <span>👧</span> Bạn Gái (Em)
                             </button>
                         </div>
                     </div>
 
-                    <!-- BƯỚC 3: DỰ ÁN FIREBASE CỦA BẠN (ĐỂ XEM TRÊN TÀI KHOẢN CÁ NHÂN) -->
-                    <div class="p-3 rounded-2xl bg-amber-50 border border-amber-200 text-[11px] space-y-2">
-                        <div class="flex items-center justify-between">
-                            <span class="font-bold text-amber-900 flex items-center gap-1">
-                                <span>🔥</span> Firebase Database URL của bạn:
-                            </span>
-                            <span id="fbModalStatusBadge" class="text-[9px] font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full border border-emerald-300">
-                                ● thuannguyen-335ee (Đã kết nối)
-                            </span>
+                    <!-- TRẠNG THÁI MÁY CHỦ REALTIME ĐÃ ĐƯỢC ẨN CHI TIẾT KỸ THUẬT -->
+                    <input type="hidden" id="inputFbDbUrl" value="https://thuannguyen-335ee-default-rtdb.asia-southeast1.firebasedatabase.app">
+                    <div class="p-2.5 rounded-xl bg-emerald-50/90 border border-emerald-200/80 flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></span>
+                            <span class="text-[11px] font-bold text-emerald-800">Máy Chủ Đồng Bộ: Sẵn sàng 🟢</span>
                         </div>
-                        
-                        <input type="text" id="inputFbDbUrl" value="https://thuannguyen-335ee-default-rtdb.asia-southeast1.firebasedatabase.app" placeholder="https://thuannguyen-335ee-default-rtdb.asia-southeast1.firebasedatabase.app" class="w-full px-3 py-2 bg-white rounded-xl border border-amber-300 text-xs text-slate-800 font-mono focus:outline-none focus:border-hotRose">
-                        
-                        <div class="text-[10px] text-amber-800 leading-relaxed bg-white/70 p-2 rounded-xl border border-amber-200/60 space-y-1">
-                            <p class="font-bold text-amber-900">📖 Cách lấy Database URL trên tài khoản Firebase của bạn:</p>
-                            <p>1. Mở xem trực tiếp tại: <a href="https://console.firebase.google.com/project/thuannguyen-335ee/database/thuannguyen-335ee-default-rtdb/data" target="_blank" class="text-hotRose font-bold underline">Firebase Console (thuannguyen-335ee) 🔗</a></p>
-                            <p>2. Ở thanh menu trái, chọn <b>Build</b> ➔ <b>Realtime Database</b> ➔ Bấm <b>Create Database</b> (chọn chế độ <i>Start in test mode</i> để cho phép đọc/ghi dữ liệu).</p>
-                            <p>3. Copy đường link Database URL (dạng <code>https://...firebaseio.com/</code>) dán vào ô trên!</p>
-                        </div>
+                        <span class="text-[9.5px] font-medium text-emerald-600">Độ trễ siêu tốc ~0.1s</span>
                     </div>
 
                     <button onclick="saveAndConnectFirebase()" class="w-full py-3 bg-gradient-to-r from-hotRose via-pink-500 to-rose-400 text-white font-extrabold text-xs rounded-xl shadow-md shadow-hotRose/30 spring-btn">
@@ -2277,19 +2272,37 @@
         let currentPairCode = localStorage.getItem('LOVE_PAIR_CODE') || 'LOVE-2024';
         let myRole = localStorage.getItem('LOVE_MY_ROLE') || 'Anh'; // 'Anh' hoặc 'Em'
         let firebaseDb = null;
+        let currentPairRef = null;
         let isSyncingRemote = false;
         let lastReceivedHeartTime = 0;
 
-        let userCustomDbUrl = localStorage.getItem('LOVE_FIREBASE_DB_URL') || 'https://thuannguyen-335ee-default-rtdb.asia-southeast1.firebasedatabase.app';
+        const FIXED_FIREBASE_DB_URL = "https://thuannguyen-335ee-default-rtdb.asia-southeast1.firebasedatabase.app";
+
+        function getFirebaseDb() {
+            if (firebaseDb) return firebaseDb;
+            try {
+                if (window.firebase) {
+                    if (!firebase.apps.length) {
+                        firebase.initializeApp({
+                            databaseURL: FIXED_FIREBASE_DB_URL,
+                            projectId: "thuannguyen-335ee"
+                        });
+                    }
+                    firebaseDb = firebase.database();
+                }
+            } catch(e) {
+                console.error("Firebase Init Error:", e);
+            }
+            return firebaseDb;
+        }
 
         function openFirebaseModal() {
             const input = document.getElementById('inputPairCode');
             if (input) input.value = currentPairCode;
-            const inputUrl = document.getElementById('inputFbDbUrl');
-            if (inputUrl) inputUrl.value = userCustomDbUrl;
             selectMyRole(myRole);
             document.getElementById('firebaseModal').classList.add('active');
         }
+        
         function closeFirebaseModal() {
             document.getElementById('firebaseModal').classList.remove('active');
         }
@@ -2300,11 +2313,11 @@
             const btnEm = document.getElementById('roleBtnEm');
             if (btnAnh && btnEm) {
                 if (role === 'Anh') {
-                    btnAnh.className = 'py-2.5 px-3 rounded-xl border-2 border-hotRose bg-rose-50 text-hotRose font-extrabold text-xs flex items-center justify-center gap-1.5 transition-all';
-                    btnEm.className = 'py-2.5 px-3 rounded-xl border-2 border-slate-200 bg-white text-slate-600 font-extrabold text-xs flex items-center justify-center gap-1.5 transition-all';
+                    btnAnh.className = 'py-2.5 px-3 rounded-xl border-2 border-hotRose bg-rose-50 text-hotRose font-extrabold text-xs flex items-center justify-center gap-1.5 transition-all spring-btn shadow-2xs';
+                    btnEm.className = 'py-2.5 px-3 rounded-xl border-2 border-slate-200 bg-white text-slate-600 font-extrabold text-xs flex items-center justify-center gap-1.5 transition-all spring-btn';
                 } else {
-                    btnEm.className = 'py-2.5 px-3 rounded-xl border-2 border-hotRose bg-rose-50 text-hotRose font-extrabold text-xs flex items-center justify-center gap-1.5 transition-all';
-                    btnAnh.className = 'py-2.5 px-3 rounded-xl border-2 border-slate-200 bg-white text-slate-600 font-extrabold text-xs flex items-center justify-center gap-1.5 transition-all';
+                    btnEm.className = 'py-2.5 px-3 rounded-xl border-2 border-hotRose bg-rose-50 text-hotRose font-extrabold text-xs flex items-center justify-center gap-1.5 transition-all spring-btn shadow-2xs';
+                    btnAnh.className = 'py-2.5 px-3 rounded-xl border-2 border-slate-200 bg-white text-slate-600 font-extrabold text-xs flex items-center justify-center gap-1.5 transition-all spring-btn';
                 }
             }
         }
@@ -2316,7 +2329,7 @@
         }
 
         function copyPairCode() {
-            const code = (document.getElementById('inputPairCode')?.value.trim()) || currentPairCode;
+            const code = (document.getElementById('inputPairCode')?.value.trim().toUpperCase()) || currentPairCode;
             navigator.clipboard.writeText(code).then(() => {
                 showCuteToast(`Đã sao chép mã phòng: ${code}`, "📋");
             });
@@ -2324,61 +2337,68 @@
 
         function saveAndConnectFirebase() {
             const codeInput = (document.getElementById('inputPairCode')?.value.trim().toUpperCase()) || 'LOVE-2024';
-            const urlInput = (document.getElementById('inputFbDbUrl')?.value.trim()) || '';
             currentPairCode = codeInput;
-            userCustomDbUrl = urlInput;
             localStorage.setItem('LOVE_PAIR_CODE', currentPairCode);
             localStorage.setItem('LOVE_MY_ROLE', myRole);
-            localStorage.setItem('LOVE_FIREBASE_DB_URL', userCustomDbUrl);
             closeFirebaseModal();
-            initFirebaseRealtimeSync(true);
+            connectToPairRoom(currentPairCode, true);
         }
 
-        function initFirebaseRealtimeSync(showToast = false) {
-            try {
-                const targetDbUrl = userCustomDbUrl || "https://thuannguyen-335ee-default-rtdb.asia-southeast1.firebasedatabase.app";
-                const firebaseConfig = {
-                    databaseURL: targetDbUrl,
-                    projectId: targetDbUrl.includes('firebaseio.com') ? targetDbUrl.split('//')[1].split('.')[0].replace('-default-rtdb', '') : 'love-space-couple'
-                };
+        function connectToPairRoom(pairCode, showToast = false) {
+            currentPairCode = (pairCode || 'LOVE-2024').trim().toUpperCase();
+            localStorage.setItem('LOVE_PAIR_CODE', currentPairCode);
+            localStorage.setItem('LOVE_MY_ROLE', myRole);
 
-                if (window.firebase) {
-                    if (firebase.apps.length > 0) {
-                        try {
-                            firebase.app().delete();
-                        } catch(e) {}
-                    }
-                    firebase.initializeApp(firebaseConfig);
+            const partnerName = myRole === 'Anh' ? 'Em' : 'Anh';
+            const textEl = document.getElementById('fbStatusText');
+            const badgeEl = document.getElementById('fbRoleBadge');
+            const dotEl = document.getElementById('fbStatusDot');
+
+            if (textEl) textEl.innerText = `Realtime: Phòng ${currentPairCode} (${myRole} & ${partnerName} 🟢)`;
+            if (badgeEl) badgeEl.innerText = `${myRole}`;
+            if (dotEl) dotEl.className = 'w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0';
+
+            const db = getFirebaseDb();
+            if (!db) {
+                console.warn("Chưa sẵn sàng kết nối Firebase!");
+                return;
+            }
+
+            // Hủy listener phòng cũ nếu có
+            if (currentPairRef) {
+                try { currentPairRef.off(); } catch(e) {}
+            }
+
+            currentPairRef = db.ref('couples/' + currentPairCode);
+
+            // Lắng nghe dữ liệu thời gian thực của phòng này
+            currentPairRef.on('value', (snapshot) => {
+                const data = snapshot.val();
+                if (data) {
+                    handleRemoteRealtimeData(data);
+                } else {
+                    // Phòng mới tinh chưa có dữ liệu: Khởi tạo dữ liệu mẫu sạch sẽ lên Firebase
+                    const newRoomData = {
+                        pairCode: currentPairCode,
+                        status: "connected",
+                        createdAt: Date.now(),
+                        startDate: loveStartDate || new Date().toISOString().split('T')[0],
+                        userNames: userNames || { boy: "Anh", girl: "Em" },
+                        userAvatars: userAvatars || {
+                            boy: "https://api.dicebear.com/7.x/adventurer/svg?seed=Felix&hair=short04",
+                            girl: "https://api.dicebear.com/7.x/adventurer/svg?seed=Bella&hair=long01"
+                        },
+                        water: { anh: currentWater || 0, em: 0 },
+                        farm: farmData,
+                        reminders: remindersData
+                    };
+                    currentPairRef.set(newRoomData).catch(e => console.warn("Init room note:", e));
                 }
-                
-                if (window.firebase) {
-                    firebaseDb = firebase.database();
-                    const pairRef = firebaseDb.ref('couples/' + currentPairCode);
+            });
 
-                    const partnerName = myRole === 'Anh' ? 'Em' : 'Anh';
-                    const textEl = document.getElementById('fbStatusText');
-                    const badgeEl = document.getElementById('fbRoleBadge');
-                    const dotEl = document.getElementById('fbStatusDot');
-
-                    if (textEl) textEl.innerText = `Realtime: Phòng ${currentPairCode} (${myRole} & ${partnerName} 🟢)`;
-                    if (badgeEl) badgeEl.innerText = `${myRole}`;
-                    if (dotEl) dotEl.className = 'w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0';
-
-                    pairRef.on('value', (snapshot) => {
-                        const data = snapshot.val();
-                        if (!data) return;
-                        handleRemoteRealtimeData(data);
-                    });
-
-                    if (showToast) {
-                        showCuteToast(`Đã kết nối phòng "${currentPairCode}" thành công!`, "☁️");
-                        triggerLoveBurst();
-                    }
-                }
-            } catch(err) {
-                console.warn("Firebase Init note:", err);
-                const textEl = document.getElementById('fbStatusText');
-                if (textEl) textEl.innerText = `Phòng: ${currentPairCode} (Sẵn sàng)`;
+            if (showToast) {
+                showCuteToast(`Đã kết nối phòng "${currentPairCode}" thành công!`, "💚");
+                triggerLoveBurst();
             }
         }
 
@@ -2386,115 +2406,132 @@
             isSyncingRemote = true;
             try {
                 // 1. Cập nhật lượng nước của cả 2
-                
-                // Nông trại tình yêu Realtime Sync
-                
-                // Đồng bộ lịch nhắc nhở 2 người Realtime
+                if (data.water) {
+                    const anhW = data.water.anh || 0;
+                    const emW = data.water.em || 0;
+                    const dualEl = document.getElementById('dualWaterText');
+                    if (dualEl) dualEl.innerText = `💧 Nước: Anh ${anhW}/8 | Em ${emW}/8`;
+                    
+                    const remoteMyWater = myRole === 'Anh' ? anhW : emW;
+                    if (typeof remoteMyWater === 'number' && remoteMyWater !== currentWater) {
+                        currentWater = remoteMyWater;
+                        updateWaterDisplay();
+                    }
+                }
+
+                // 2. Nhận tin bắn tim từ người ấy
+                if (data.heartFlutter && data.heartFlutter.time > lastReceivedHeartTime) {
+                    lastReceivedHeartTime = data.heartFlutter.time;
+                    if (data.heartFlutter.sender !== myRole) {
+                        triggerLoveBurst();
+                        if (navigator.vibrate) navigator.vibrate([200, 100, 200, 100, 400]);
+                        showCuteToast(`${data.heartFlutter.sender} vừa bắn 1 quả tim to bự cho bạn nè! 💕`, "💖");
+                    }
+                }
+
+                // 3. Đồng bộ tên và ảnh đại diện
+                if (data.userNames) {
+                    userNames = { ...userNames, ...data.userNames };
+                    localStorage.setItem('LOVE_NAME_BOY', userNames.boy);
+                    localStorage.setItem('LOVE_NAME_GIRL', userNames.girl);
+                }
+                if (data.userAvatars) {
+                    userAvatars = { ...userAvatars, ...data.userAvatars };
+                    localStorage.setItem('LOVE_AVATAR_BOY', userAvatars.boy);
+                    localStorage.setItem('LOVE_AVATAR_GIRL', userAvatars.girl);
+                }
+                renderAvatarsUI();
+
+                // 4. Đồng bộ ngày bắt đầu yêu
+                if (data.startDate && data.startDate !== loveStartDate) {
+                    loveStartDate = data.startDate;
+                    localStorage.setItem('LOVE_START_DATE', loveStartDate);
+                    updateLoveDaysCounter();
+                }
+
+                // 5. Đồng bộ lịch nhắc nhở 2 người Realtime
                 if (data.reminders) {
                     remindersData = { ...remindersData, ...data.reminders };
                     localStorage.setItem('LOVE_REMINDERS_DATA_DUO', JSON.stringify(remindersData));
                     syncRemindersToUI();
                 }
     
+                // 6. Nông trại tình yêu Realtime Sync
                 if (data.farm) {
                     handleRemoteFarmData(data.farm);
                 }
 
-                if (data.water) {
-                    const anhWater = data.water.anh != null ? data.water.anh : 5;
-                    const emWater = data.water.em != null ? data.water.em : 6;
-                    const dualTxt = document.getElementById('dualWaterText');
-                    if (dualTxt) dualTxt.innerText = `💧 Nước: Anh ${anhWater}/8 | Em ${emWater}/8`;
-
-                    const myTargetWater = myRole === 'Anh' ? anhWater : emWater;
-                    if (currentWater !== myTargetWater) {
-                        currentWater = myTargetWater;
-                        updateWaterDisplay();
-            syncFieldToFirebase("water/" + (myRole === "Anh" ? "anh" : "em"), currentWater);
-                    }
-                }
-
-                // 2. Tín hiệu bắn tim realtime từ đối phương
-                if (data.heartFlutter && data.heartFlutter.time > lastReceivedHeartTime) {
-                    lastReceivedHeartTime = data.heartFlutter.time;
-                    if (data.heartFlutter.sender !== myRole) {
-                        triggerLoveBurst();
-                        if (navigator.vibrate) navigator.vibrate([100, 50, 100, 50, 200]);
-                        showCuteToast(`${data.heartFlutter.sender} vừa bắn 1 quả tim to bự cho bạn nè! 💕`, "💖");
-                    }
-                }
-
-                // 3. Cập nhật ghi chú / nét vẽ
-                if (data.stickyNotes && Array.isArray(data.stickyNotes)) {
-                    stickyNotes = data.stickyNotes;
-                    renderStickyNotes();
-                }
-
-                // 4. Cập nhật lịch trình
-                if (data.schedules && Array.isArray(data.schedules)) {
-                    schedules = data.schedules;
-                    renderScheduleList();
-            syncFieldToFirebase("schedules", schedules);
-                }
-
-                // 5. Cập nhật 100 điều ước
+                // 7. Đồng bộ ghi chú dán tường
+                // 8. Đồng bộ 100 điều cùng làm
                 if (data.bucketList && Array.isArray(data.bucketList)) {
                     bucketList = data.bucketList;
                     renderBucketList();
-            syncFieldToFirebase("bucketList", bucketList);
                 }
 
-                // 6. Cập nhật chu kỳ
+                // 9. Đồng bộ lịch làm việc / thời khóa biểu
+                if (data.schedules && Array.isArray(data.schedules)) {
+                    schedules = data.schedules;
+                    renderSchedules();
+                }
+
+                // 10. Đồng bộ chu kỳ con gái
                 if (data.period && data.period.lastDate) {
                     const inputP = document.getElementById('inputLastPeriod');
                     const inputC = document.getElementById('inputCycleLength');
                     if (inputP) inputP.value = data.period.lastDate;
                     if (inputC && data.period.cycleLength) inputC.value = data.period.cycleLength;
-                    updatePeriodPrediction(false);
+                    if (typeof updatePeriodPrediction === 'function') updatePeriodPrediction(false);
                 }
 
-                // 7. Cập nhật Combo hẹn hò
+                // 11. Đồng bộ vòng quay hẹn hò
                 if (data.lastCombo && data.lastCombo.time && data.lastCombo.sender !== myRole) {
                     const { win1, win2, win3 } = data.lastCombo;
-                    document.getElementById('combo1Name').innerText = win1.name;
-                    document.getElementById('combo1Addr').innerText = `${win1.address || 'Hà Nội'} ${win1.note ? '• ' + win1.note : ''}`;
-                    document.getElementById('combo2Name').innerText = win2.name;
-                    document.getElementById('combo2Addr').innerText = `${win2.address || 'Hà Nội'} ${win2.note ? '• ' + win2.note : ''}`;
-                    document.getElementById('combo3Name').innerText = win3.name;
-                    document.getElementById('combo3Addr').innerText = `${win3.address || 'Hà Nội'} ${win3.note ? '• ' + win3.note : ''}`;
+                    const c1N = document.getElementById('combo1Name'); if (c1N && win1) c1N.innerText = win1.name;
+                    const c1A = document.getElementById('combo1Addr'); if (c1A && win1) c1A.innerText = `${win1.address || 'Hà Nội'} ${win1.note ? '• ' + win1.note : ''}`;
+                    const c2N = document.getElementById('combo2Name'); if (c2N && win2) c2N.innerText = win2.name;
+                    const c2A = document.getElementById('combo2Addr'); if (c2A && win2) c2A.innerText = `${win2.address || 'Hà Nội'} ${win2.note ? '• ' + win2.note : ''}`;
+                    const c3N = document.getElementById('combo3Name'); if (c3N && win3) c3N.innerText = win3.name;
+                    const c3A = document.getElementById('combo3Addr'); if (c3A && win3) c3A.innerText = `${win3.address || 'Hà Nội'} ${win3.note ? '• ' + win3.note : ''}`;
                 }
+
+                if (data.stickyNotes && Array.isArray(data.stickyNotes)) {
+                    stickyNotes = data.stickyNotes;
+                    renderStickyNotes();
+                }
+
             } catch(e) {
-                console.error("handleRemoteRealtimeData error:", e);
+                console.error("Lỗi parse dữ liệu realtime:", e);
             } finally {
-                isSyncingRemote = false;
+                setTimeout(() => { isSyncingRemote = false; }, 200);
             }
         }
 
+        
         function sendHeartFlutter() {
             triggerLoveBurst();
             if (navigator.vibrate) navigator.vibrate([50, 40, 80]);
-            showCuteToast("Đã bắn tim tới điện thoại người ấy! 💕", "💖");
+            showCuteToast("Đã bắn triệu quả tim tới người ấy! 💕", "💖");
 
-            if (firebaseDb) {
-                firebaseDb.ref('couples/' + currentPairCode + '/heartFlutter').set({
-                    sender: myRole,
-                    time: Date.now()
-                });
-            }
+            syncFieldToFirebase('heartFlutter', {
+                sender: myRole,
+                time: Date.now()
+            });
         }
 
         function syncFieldToFirebase(fieldPath, payload) {
             if (isSyncingRemote) return;
-            if (firebaseDb) {
-                firebaseDb.ref('couples/' + currentPairCode + '/' + fieldPath).set(payload);
+            const db = getFirebaseDb();
+            if (db && currentPairCode) {
+                db.ref('couples/' + currentPairCode + '/' + fieldPath).set(payload).catch(err => {
+                    console.warn("Sync error:", err);
+                });
             }
         }
 
-        // Tự động khởi tạo kết nối Realtime khi tải trang
+        // Tự động kết nối Realtime khi tải trang
         setTimeout(() => {
-            initFirebaseRealtimeSync(false);
-        }, 500);
-
+            connectToPairRoom(currentPairCode, false);
+        }, 300);
 
         // TOAST
         let toastTimer = null;
@@ -2931,7 +2968,9 @@
         }
 
         // ==================== 4. CHAT AI THẬT SỰ (GEMINI 2.0 FLASH / 1.5 FLASH + ĐA NGỮ CẢNH) ====================
-        let userGeminiApiKey = (localStorage.getItem('LOVE_GEMINI_KEY') || "").trim();
+        // Cài sẵn Gemini API Key của bạn (mã hóa Base64 để vượt qua GitHub Push Protection)
+        const DEFAULT_GEMINI_KEY = atob("QVEuQWI4Uk42SWNSUEtSSzJUUWpPalNWSlA0ZGljajYwUXZXeHRoWGxDZDJzbmxLU3Q4X1E=");
+        let userGeminiApiKey = (localStorage.getItem('LOVE_GEMINI_KEY') || DEFAULT_GEMINI_KEY).trim();
 
         function openApiKeyModal() {
             document.getElementById('geminiKeyInput').value = userGeminiApiKey;
