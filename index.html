@@ -706,22 +706,49 @@
                         </button>
                     </div>
 
-                    <div class="inline-flex items-center space-x-3 bg-white/80 px-4 py-1.5 rounded-full border border-white shadow-sm mt-1">
-                        <div class="text-center">
-                            <span id="liveHours" class="text-xs font-bold text-slate-700">14</span>
-                            <span class="text-[8px] text-slate-400 block -mt-0.5">Giờ</span>
+                    <!-- WIDGET ĐỒNG HỒ ĐÔI YÊU XA (LONG DISTANCE DUAL CLOCK CARD) -->
+                    <div class="mt-2.5 p-2.5 bg-white/90 rounded-2xl border border-rose-100/90 shadow-2xs text-left cursor-pointer spring-btn hover:shadow-xs transition-all" onclick="openNotifModal()" title="Chạm để mở Cài đặt múi giờ & Lời nhắc cặp đôi">
+                        <div class="flex items-center justify-between mb-1.5">
+                            <div class="flex items-center gap-1.5 text-[10.5px] font-extrabold text-slate-700">
+                                <span class="text-xs">🌍</span>
+                                <span>Đồng Hồ Đôi Yêu Xa</span>
+                            </div>
+                            <span id="ldrDiffBadge" class="text-[9px] font-black text-hotRose bg-pink-50 border border-pink-200/80 px-2 py-0.5 rounded-full">
+                                🕒 Lệch 6 giờ
+                            </span>
                         </div>
-                        <span class="text-slate-300 font-bold">:</span>
-                        <div class="text-center">
-                            <span id="liveMins" class="text-xs font-bold text-slate-700">30</span>
-                            <span class="text-[8px] text-slate-400 block -mt-0.5">Phút</span>
+                        <div class="grid grid-cols-2 gap-2">
+                            <!-- BÊN ANH -->
+                            <div class="p-2 rounded-xl bg-gradient-to-br from-pink-50/70 to-rose-50/40 border border-rose-100/70">
+                                <div class="flex items-center justify-between mb-0.5">
+                                    <span class="text-[10px] font-black text-slate-700 flex items-center gap-1">
+                                        <span id="dualClockFlagBoy">🇻🇳</span>
+                                        <span id="dualClockNameBoy" class="truncate max-w-[65px]">Anh</span>
+                                    </span>
+                                    <span id="dualClockPeriodBoy" class="text-[8.5px] text-slate-400 font-semibold">🌙 Đêm</span>
+                                </div>
+                                <div class="text-base font-black text-slate-800 tracking-tight" id="dualClockTimeBoy">22:15:30</div>
+                                <div class="text-[8px] text-slate-400 font-medium truncate" id="dualClockCityBoy">Việt Nam (GMT+7)</div>
+                            </div>
+                            <!-- BÊN EM -->
+                            <div class="p-2 rounded-xl bg-gradient-to-br from-purple-50/70 to-pink-50/40 border border-purple-100/70">
+                                <div class="flex items-center justify-between mb-0.5">
+                                    <span class="text-[10px] font-black text-slate-700 flex items-center gap-1">
+                                        <span id="dualClockFlagGirl">🇩🇪</span>
+                                        <span id="dualClockNameGirl" class="truncate max-w-[65px]">Em</span>
+                                    </span>
+                                    <span id="dualClockPeriodGirl" class="text-[8.5px] text-slate-400 font-semibold">☀️ Chiều</span>
+                                </div>
+                                <div class="text-base font-black text-hotRose tracking-tight" id="dualClockTimeGirl">16:15:30</div>
+                                <div class="text-[8px] text-slate-400 font-medium truncate" id="dualClockCityGirl">Đức (GMT+1)</div>
+                            </div>
                         </div>
-                        <span class="text-slate-300 font-bold">:</span>
-                        <div class="text-center">
-                            <span id="liveSecs" class="text-xs font-bold text-hotRose">45</span>
-                            <span class="text-[8px] text-hotRose/70 block -mt-0.5">Giây</span>
-                        </div>
+                        <p class="text-[8.5px] text-center text-slate-400 mt-1.5 font-medium" id="ldrStatusQuote">
+                            ✨ Dù cách xa nghìn trùng, tình yêu vẫn đong đầy từng giây phút • Chạm để cài đặt múi giờ ⏰
+                        </p>
                     </div>
+                    <!-- Giữ ẩn id cũ để tương thích hoàn toàn code cũ nếu có -->
+                    <span id="liveHours" class="hidden"></span><span id="liveMins" class="hidden"></span><span id="liveSecs" class="hidden"></span>
                 </div>
 
                 <!-- GƯƠNG THẦN BUỔI SÁNG -->
@@ -1395,13 +1422,18 @@
                     </div>
 
                     <!-- Nút tương tác tưới cây & Đặt lại -->
+                                        <!-- Nút tương tác tưới cây & Đặt lại (Có đếm ngược hồi giọt nước & chống spam) -->
                     <div class="mt-3 flex flex-col items-center gap-1.5">
-                        <button onclick="waterLoveTree()" class="px-4 py-2 rounded-xl bg-gradient-to-r from-pink-500 via-rose-400 to-purple-400 text-white font-extrabold text-xs spring-btn shadow-md shadow-pink-300/40 flex items-center gap-2 active:scale-95 transition-all">
-                            <span class="text-sm">💧</span>
-                            <span>Tưới Nước Cho Cây (+15 EXP)</span>
+                        <button id="btnWaterLoveTree" onclick="waterLoveTree()" class="px-4 py-2 rounded-xl bg-gradient-to-r from-pink-500 via-rose-400 to-purple-400 text-white font-extrabold text-xs spring-btn shadow-md shadow-pink-300/40 flex items-center gap-2 active:scale-95 transition-all">
+                            <span class="text-sm" id="btnWaterLoveTreeIcon">💧</span>
+                            <span id="btnWaterLoveTreeText">Tưới Nước Cho Cây (+15 EXP)</span>
                         </button>
-                        <button onclick="resetLoveTreeToSeed()" class="text-[9.5px] text-slate-400 hover:text-hotRose font-bold underline transition-all spring-btn mt-0.5">
-                            🌱 Đặt lại hạt mầm từ đầu (Cấp 1)
+                        <!-- Trạng thái lượt tưới của 2 người -->
+                        <div id="loveTreeDualCooldownStatus" class="text-[9.5px] font-semibold text-slate-400">
+                            Anh: Sẵn sàng 💧 | Em: Sẵn sàng 💧
+                        </div>
+                        <button onclick="resetLoveTreeToSeed()" class="text-[10px] font-bold text-slate-400 hover:text-rose-500 transition-colors spring-btn py-0.5 px-2">
+                            🔄 Trồng lại từ mầm (Reset Lv 1)
                         </button>
                     </div>
                 </div>
@@ -1773,6 +1805,37 @@
                         </p>
                     </div>
 
+                    <!-- THẺ CÀI ĐẶT MÚI GIỜ YÊU XA (LDR TIMEZONE SELECTOR) -->
+                    <div class="p-2.5 rounded-2xl bg-gradient-to-r from-pink-50/90 via-white to-purple-50/90 border border-pink-200/80 shadow-2xs">
+                        <div class="flex items-center justify-between mb-1.5">
+                            <div class="flex items-center gap-2">
+                                <span class="text-xl" id="remindTzFlag">🇻🇳</span>
+                                <div>
+                                    <span class="text-[11px] font-black text-slate-800 block leading-tight" id="remindTzRoleTitle">Múi Giờ Bên Anh</span>
+                                    <span class="text-[9px] text-slate-400 font-semibold" id="remindTzDiffDesc">Đang cùng múi giờ với bạn</span>
+                                </div>
+                            </div>
+                            <select id="selectRemindTimezone" onchange="changeRemindTimezone(this.value)" class="text-[10.5px] font-extrabold text-hotRose bg-white border border-pink-200 rounded-xl px-2.5 py-1.5 shadow-2xs focus:outline-none focus:ring-1 focus:ring-hotRose cursor-pointer">
+                                <option value="Asia/Ho_Chi_Minh">🇻🇳 Việt Nam (GMT+7)</option>
+                                <option value="Europe/Berlin">🇩🇪 Đức (Berlin GMT+1/2)</option>
+                                <option value="Europe/London">🇬🇧 Anh (London GMT+0/1)</option>
+                                <option value="Europe/Paris">🇫🇷 Pháp (Paris GMT+1/2)</option>
+                                <option value="Asia/Tokyo">🇯🇵 Nhật Bản (GMT+9)</option>
+                                <option value="Asia/Seoul">🇰🇷 Hàn Quốc (GMT+9)</option>
+                                <option value="America/New_York">🇺🇸 Mỹ (New York GMT-5)</option>
+                                <option value="America/Los_Angeles">🇺🇸 Mỹ (California GMT-8)</option>
+                                <option value="Australia/Sydney">🇦🇺 Úc (Sydney GMT+10)</option>
+                                <option value="Asia/Singapore">🇸🇬 Singapore (GMT+8)</option>
+                                <option value="Asia/Bangkok">🇹🇭 Thái Lan (GMT+7)</option>
+                                <option value="Asia/Taipei">🇹🇼 Đài Loan (GMT+8)</option>
+                            </select>
+                        </div>
+                        <div class="flex items-center justify-between text-[8.5px] text-slate-400 border-t border-pink-100/60 pt-1">
+                            <span>💡 Tự động quy đổi sang giờ của bạn</span>
+                            <span id="remindTzConvertedStatus" class="font-bold text-hotRose">Đức chậm hơn VN 6 giờ</span>
+                        </div>
+                    </div>
+
                     <!-- Trạng thái cấp quyền Push Notification -->
                     <div id="notifPermStatusBox" class="p-2.5 rounded-2xl bg-rose-50/80 border border-rose-200 flex items-center justify-between">
                         <div>
@@ -1833,19 +1896,25 @@
                             <div class="grid grid-cols-3 gap-1.5 pt-1 text-[9px] border-t border-slate-50">
                                 <div>
                                     <span class="text-slate-400 block mb-0.5">🌅 Sáng:</span>
-                                    <input type="time" id="mealBreakfastTime" value="07:30" class="w-full px-1.5 py-1 rounded-lg border border-slate-200 bg-slate-50 font-bold text-slate-700" onchange="saveRemindersConfig()">
+                                    <input type="time" id="mealBreakfastTime" value="07:30" class="w-full px-1.5 py-1 rounded-lg border border-slate-200 bg-slate-50 font-bold text-slate-700" onchange="saveRemindersConfig(); updateReminderConvertedTimes();">
+                                    <span id="mealBreakfastConverted" class="text-[8px] text-hotRose font-bold block mt-0.5 truncate"></span>
                                 </div>
                                 <div>
                                     <span class="text-slate-400 block mb-0.5">☀️ Trưa:</span>
-                                    <input type="time" id="mealLunchTime" value="12:00" class="w-full px-1.5 py-1 rounded-lg border border-slate-200 bg-slate-50 font-bold text-slate-700" onchange="saveRemindersConfig()">
+                                    <input type="time" id="mealLunchTime" value="12:00" class="w-full px-1.5 py-1 rounded-lg border border-slate-200 bg-slate-50 font-bold text-slate-700" onchange="saveRemindersConfig(); updateReminderConvertedTimes();">
+                                    <span id="mealLunchConverted" class="text-[8px] text-hotRose font-bold block mt-0.5 truncate"></span>
                                 </div>
                                 <div>
                                     <span class="text-slate-400 block mb-0.5">🌙 Tối:</span>
-                                    <input type="time" id="mealDinnerTime" value="19:00" class="w-full px-1.5 py-1 rounded-lg border border-slate-200 bg-slate-50 font-bold text-slate-700" onchange="saveRemindersConfig()">
+                                    <input type="time" id="mealDinnerTime" value="19:00" class="w-full px-1.5 py-1 rounded-lg border border-slate-200 bg-slate-50 font-bold text-slate-700" onchange="saveRemindersConfig(); updateReminderConvertedTimes();">
+                                    <span id="mealDinnerConverted" class="text-[8px] text-hotRose font-bold block mt-0.5 truncate"></span>
                                 </div>
                             </div>
-                            <div class="text-right pt-0.5">
-                                <button onclick="testReminder('meals')" class="px-2 py-0.5 bg-amber-50 text-amber-700 font-bold text-[9px] rounded-lg border border-amber-200 hover:bg-amber-100 spring-btn">Thử Chuông Báo Ăn ⚡</button>
+                            <div class="flex items-center justify-end gap-1.5 pt-0.5">
+                                <button onclick="testReminder('meals')" class="px-2 py-1 bg-slate-100 text-slate-600 font-bold text-[9px] rounded-lg border border-slate-200 hover:bg-slate-200 spring-btn">Thử máy này 🔔</button>
+                                <button onclick="sendRemoteBuzzAlert('meals')" class="px-2.5 py-1 bg-gradient-to-r from-amber-500 to-orange-400 text-white font-extrabold text-[9px] rounded-lg shadow-2xs hover:shadow-xs spring-btn flex items-center gap-1">
+                                    <span>🚀 Bắn chuông báo ăn</span>
+                                </button>
                             </div>
                         </div>
 
@@ -1868,15 +1937,18 @@
                             <div class="grid grid-cols-3 gap-1.5 pt-1 text-[9px] border-t border-slate-50">
                                 <div>
                                     <span class="text-slate-400 block mb-0.5">🌅 Cữ Sáng:</span>
-                                    <input type="time" id="medMorningTime" value="08:30" class="w-full px-1.5 py-1 rounded-lg border border-slate-200 bg-slate-50 font-bold text-slate-700" onchange="saveRemindersConfig()">
+                                    <input type="time" id="medMorningTime" value="08:30" class="w-full px-1.5 py-1 rounded-lg border border-slate-200 bg-slate-50 font-bold text-slate-700" onchange="saveRemindersConfig(); updateReminderConvertedTimes();">
+                                    <span id="medMorningConverted" class="text-[8px] text-hotRose font-bold block mt-0.5 truncate"></span>
                                 </div>
                                 <div>
                                     <span class="text-slate-400 block mb-0.5">☀️ Cữ Trưa:</span>
-                                    <input type="time" id="medNoonTime" value="12:30" class="w-full px-1.5 py-1 rounded-lg border border-slate-200 bg-slate-50 font-bold text-slate-700" onchange="saveRemindersConfig()">
+                                    <input type="time" id="medNoonTime" value="12:30" class="w-full px-1.5 py-1 rounded-lg border border-slate-200 bg-slate-50 font-bold text-slate-700" onchange="saveRemindersConfig(); updateReminderConvertedTimes();">
+                                    <span id="medNoonConverted" class="text-[8px] text-hotRose font-bold block mt-0.5 truncate"></span>
                                 </div>
                                 <div>
                                     <span class="text-slate-400 block mb-0.5">🌙 Cữ Tối:</span>
-                                    <input type="time" id="medNightTime" value="20:30" class="w-full px-1.5 py-1 rounded-lg border border-slate-200 bg-slate-50 font-bold text-slate-700" onchange="saveRemindersConfig()">
+                                    <input type="time" id="medNightTime" value="20:30" class="w-full px-1.5 py-1 rounded-lg border border-slate-200 bg-slate-50 font-bold text-slate-700" onchange="saveRemindersConfig(); updateReminderConvertedTimes();">
+                                    <span id="medNightConverted" class="text-[8px] text-hotRose font-bold block mt-0.5 truncate"></span>
                                 </div>
                             </div>
                             <div class="flex items-center justify-between pt-0.5">
@@ -1903,8 +1975,11 @@
                             <div class="flex items-center justify-between pt-1 text-[10px] border-t border-slate-50">
                                 <span class="text-slate-500">Giờ nhắc ngủ:</span>
                                 <div class="flex items-center gap-1.5">
-                                    <input type="time" id="sleepTimeInput" value="22:30" class="px-2 py-1 rounded-lg border border-slate-200 bg-slate-50 font-bold text-slate-700" onchange="saveRemindersConfig()">
-                                    <button onclick="testReminder('sleep')" class="px-2 py-1 bg-indigo-50 text-indigo-700 font-bold rounded-lg border border-indigo-200 hover:bg-indigo-100 spring-btn">Thử ⚡</button>
+                                    <input type="time" id="sleepTimeInput" value="22:30" class="px-2 py-1 rounded-lg border border-slate-200 bg-slate-50 font-bold text-slate-700" onchange="saveRemindersConfig(); updateReminderConvertedTimes();"><span id="sleepConverted" class="text-[8px] text-hotRose font-bold block mt-0.5 truncate"></span>
+                                    <button onclick="testReminder('sleep')" class="px-2 py-1 bg-slate-100 text-slate-600 font-bold rounded-lg border border-slate-200 hover:bg-slate-200 spring-btn text-[9px]">Thử máy này 🔔</button>
+                                    <button onclick="sendRemoteBuzzAlert('sleep')" class="px-2 py-1 bg-gradient-to-r from-indigo-500 to-purple-400 text-white font-extrabold rounded-lg shadow-2xs hover:shadow-xs spring-btn text-[9px] flex items-center gap-1">
+                                        <span>🚀 Bắn chuông</span>
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -1929,6 +2004,38 @@
 
                     </div>
 
+                    <!-- THANH BẮN THÔNG BÁO TỨC THÌ SANG MÁY NGƯỜI ẤY (INSTANT REMOTE BUZZ) -->
+                    <div class="p-3 rounded-2xl bg-gradient-to-r from-rose-50/80 via-pink-50/60 to-purple-50/80 border border-rose-200/70 shadow-2xs space-y-2">
+                        <div class="flex items-center justify-between">
+                            <h5 class="text-[11px] font-black text-slate-800 flex items-center gap-1">
+                                <span>⚡</span>
+                                <span>Bắn Chuông Tức Thì Sang Người Ấy</span>
+                            </h5>
+                            <span class="text-[8.5px] font-bold text-hotRose bg-white px-2 py-0.5 rounded-full border border-pink-100">
+                                Reo chuông ngay 🚀
+                            </span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-1.5 text-[9.5px] font-extrabold">
+                            <button onclick="sendRemoteBuzzAlert('wakeUp')" class="p-2 rounded-xl bg-white border border-amber-200 text-amber-700 hover:bg-amber-50 spring-btn flex items-center justify-center gap-1.5 shadow-2xs">
+                                <span>⏰</span>
+                                <span>Đánh Thức Dậy Nào</span>
+                            </button>
+                            <button onclick="sendRemoteBuzzAlert('water')" class="p-2 rounded-xl bg-white border border-sky-200 text-sky-700 hover:bg-sky-50 spring-btn flex items-center justify-center gap-1.5 shadow-2xs">
+                                <span>💧</span>
+                                <span>Nhắc Uống Nước Ấm</span>
+                            </button>
+                            <button onclick="sendRemoteBuzzAlert('meals')" class="p-2 rounded-xl bg-white border border-emerald-200 text-emerald-700 hover:bg-emerald-50 spring-btn flex items-center justify-center gap-1.5 shadow-2xs">
+                                <span>🍚</span>
+                                <span>Nhắc Ăn Cơm Đúng Giờ</span>
+                            </button>
+                            <button onclick="sendRemoteBuzzAlert('love')" class="p-2 rounded-xl bg-white border border-pink-200 text-hotRose hover:bg-pink-50 spring-btn flex items-center justify-center gap-1.5 shadow-2xs">
+                                <span>💖</span>
+                                <span>Nhớ Người Yêu Quá</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- NÚT LƯU & GỬI TỔNG -->
                     <button onclick="saveAndCloseReminders()" id="btnSaveRemindersText" class="w-full py-2.5 bg-gradient-to-r from-hotRose to-rose-400 text-white font-extrabold rounded-xl text-xs shadow-md spring-btn">
                         Lưu & Đồng Bộ Sang Điện Thoại Người Yêu 💖
                     </button>
@@ -2286,6 +2393,7 @@
         let currentPairRef = null;
         let isSyncingRemote = false;
         let lastReceivedHeartTime = 0;
+        let lastReceivedRemoteAlertTime = Date.now();
 
         function getCleanStarterFarm() {
             return {
@@ -2626,8 +2734,22 @@
                     lastReceivedHeartTime = data.heartFlutter.time;
                     if (data.heartFlutter.sender !== myRole) {
                         triggerLoveBurst();
-                        if (navigator.vibrate) navigator.vibrate([200, 100, 200, 100, 400]);
+                        if (typeof navigator !== 'undefined' && navigator.vibrate) navigator.vibrate([200, 100, 200, 100, 400]);
                         showCuteToast(`${data.heartFlutter.sender} vừa bắn 1 quả tim to bự cho bạn nè! 💕`, "💖");
+                    }
+                }
+
+                // 2b. Nhận chuông báo thức / lời nhắc khẩn cấp từ người ấy tức thì qua Firebase
+                if (data.remoteAlert && data.remoteAlert.timestamp > lastReceivedRemoteAlertTime) {
+                    lastReceivedRemoteAlertTime = data.remoteAlert.timestamp;
+                    if (data.remoteAlert.senderRole !== myRole) {
+                        triggerLoveBurst();
+                        if (typeof navigator !== 'undefined' && navigator.vibrate) {
+                            navigator.vibrate([300, 150, 300, 150, 500]);
+                        }
+                        dispatchPushNotification(data.remoteAlert.title, data.remoteAlert.body, true);
+                        showDynamicIslandBanner(data.remoteAlert.title, data.remoteAlert.body);
+                        showCuteToast(`${data.remoteAlert.title} ${data.remoteAlert.body}`, "🔔");
                     }
                 }
 
@@ -5993,6 +6115,7 @@ CÁC NGUYÊN TẮC VÀNG ĐỂ TRÒ CHUYỆN THẬT TỰ NHIÊN (RẤT QUAN TR�
 
         let remindersData = {
             boy: {
+                timezone: "Asia/Ho_Chi_Minh",
                 water: { enabled: true, intervalMinutes: 120, lastNotified: 0 },
                 meals: { enabled: true, breakfast: "07:30", lunch: "12:00", dinner: "19:00", lastNotifiedDate: "" },
                 medicine: { enabled: true, morning: "08:30", noon: "12:30", night: "20:30", medName: "Vitamin & Thuốc bổ", lastNotifiedDate: "" },
@@ -6004,6 +6127,7 @@ CÁC NGUYÊN TẮC VÀNG ĐỂ TRÒ CHUYỆN THẬT TỰ NHIÊN (RẤT QUAN TR�
                 updatedAt: Date.now()
             },
             girl: {
+                timezone: "Europe/Berlin",
                 water: { enabled: true, intervalMinutes: 120, lastNotified: 0 },
                 meals: { enabled: true, breakfast: "07:30", lunch: "12:00", dinner: "19:00", lastNotifiedDate: "" },
                 medicine: { enabled: true, morning: "08:30", noon: "12:30", night: "20:30", medName: "Vitamin C & collagen", lastNotifiedDate: "" },
@@ -6016,6 +6140,108 @@ CÁC NGUYÊN TẮC VÀNG ĐỂ TRÒ CHUYỆN THẬT TỰ NHIÊN (RẤT QUAN TR�
             }
         };
 
+        const TIMEZONE_CONFIG = {
+            'Asia/Ho_Chi_Minh': { flag: '🇻🇳', label: 'Việt Nam (GMT+7)', city: 'Hà Nội / TP.HCM' },
+            'Europe/Berlin': { flag: '🇩🇪', label: 'Đức (Berlin GMT+1/2)', city: 'Berlin (Đức)' },
+            'Europe/London': { flag: '🇬🇧', label: 'Anh (London GMT+0/1)', city: 'London (Anh)' },
+            'Europe/Paris': { flag: '🇫🇷', label: 'Pháp (Paris GMT+1/2)', city: 'Paris (Pháp)' },
+            'Asia/Tokyo': { flag: '🇯🇵', label: 'Nhật Bản (GMT+9)', city: 'Tokyo (Nhật)' },
+            'Asia/Seoul': { flag: '🇰🇷', label: 'Hàn Quốc (GMT+9)', city: 'Seoul (Hàn)' },
+            'America/New_York': { flag: '🇺🇸', label: 'Mỹ (New York GMT-5)', city: 'New York (Mỹ)' },
+            'America/Los_Angeles': { flag: '🇺🇸', label: 'Mỹ (California GMT-8)', city: 'California (Mỹ)' },
+            'Australia/Sydney': { flag: '🇦🇺', label: 'Úc (Sydney GMT+10)', city: 'Sydney (Úc)' },
+            'Asia/Singapore': { flag: '🇸🇬', label: 'Singapore (GMT+8)', city: 'Singapore' },
+            'Asia/Bangkok': { flag: '🇹🇭', label: 'Thái Lan (GMT+7)', city: 'Bangkok (Thái)' },
+            'Asia/Taipei': { flag: '🇹🇼', label: 'Đài Loan (GMT+8)', city: 'Đài Bắc' }
+        };
+
+        function getTimeInTimezone(tz, date = new Date()) {
+            try {
+                return new Intl.DateTimeFormat('en-GB', {
+                    timeZone: tz,
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    hour12: false
+                }).format(date);
+            } catch (e) {
+                return `${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
+            }
+        }
+
+        function getTimeWithSecondsInTimezone(tz, date = new Date()) {
+            try {
+                return new Intl.DateTimeFormat('en-GB', {
+                    timeZone: tz,
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit',
+                    hour12: false
+                }).format(date);
+            } catch (e) {
+                const h = String(date.getHours()).padStart(2, '0');
+                const m = String(date.getMinutes()).padStart(2, '0');
+                const s = String(date.getSeconds()).padStart(2, '0');
+                return `${h}:${m}:${s}`;
+            }
+        }
+
+        function convertTimeBetweenTimezones(timeStr, fromTz, toTz) {
+            if (!timeStr || !timeStr.includes(':')) return '';
+            if (fromTz === toTz) return timeStr;
+            try {
+                const [targetH, targetM] = timeStr.split(':').map(Number);
+                const now = new Date();
+                const nowFromParts = new Intl.DateTimeFormat('en-US', {
+                    timeZone: fromTz, hour: 'numeric', minute: 'numeric', hour12: false
+                }).formatToParts(now);
+                const nowToParts = new Intl.DateTimeFormat('en-US', {
+                    timeZone: toTz, hour: 'numeric', minute: 'numeric', hour12: false
+                }).formatToParts(now);
+
+                const fromH = parseInt(nowFromParts.find(p => p.type === 'hour').value, 10);
+                const fromM = parseInt(nowFromParts.find(p => p.type === 'minute').value, 10);
+                const toH = parseInt(nowToParts.find(p => p.type === 'hour').value, 10);
+                const toM = parseInt(nowToParts.find(p => p.type === 'minute').value, 10);
+
+                let diffMinutes = (toH * 60 + toM) - (fromH * 60 + fromM);
+                if (diffMinutes < -12 * 60) diffMinutes += 24 * 60;
+                if (diffMinutes > 12 * 60) diffMinutes -= 24 * 60;
+
+                let totalMins = targetH * 60 + targetM + diffMinutes;
+                totalMins = (totalMins % (24 * 60) + (24 * 60)) % (24 * 60);
+                const resH = Math.floor(totalMins / 60);
+                const resM = totalMins % 60;
+                return `${String(resH).padStart(2, '0')}:${String(resM).padStart(2, '0')}`;
+            } catch (e) {
+                return '';
+            }
+        }
+
+        function getTimezoneDiffHours(tz1, tz2) {
+            const now = new Date();
+            try {
+                const getOffsetMinutes = (tz) => {
+                    const str = new Intl.DateTimeFormat('en-US', { timeZone: tz, timeZoneName: 'shortOffset' }).format(now);
+                    const m = str.match(/GMT([+-]\d+)(?::(\d+))?/);
+                    if (!m) return 0;
+                    const h = parseInt(m[1], 10);
+                    const min = m[2] ? parseInt(m[2], 10) : 0;
+                    return h * 60 + (h >= 0 ? min : -min);
+                };
+                return Math.round((getOffsetMinutes(tz1) - getOffsetMinutes(tz2)) / 60);
+            } catch (e) {
+                return 0;
+            }
+        }
+
+        function getPeriodStatus(hour) {
+            if (hour >= 5 && hour < 11) return '🌅 Sáng';
+            if (hour >= 11 && hour < 14) return '☀️ Trưa';
+            if (hour >= 14 && hour < 18) return '⛅ Chiều';
+            if (hour >= 18 && hour < 22) return '🌙 Tối';
+            return '😴 Đêm';
+        }
+
         function initRemindersConfig() {
             try {
                 const saved = localStorage.getItem('LOVE_REMINDERS_DATA_DUO');
@@ -6026,9 +6252,9 @@ CÁC NGUYÊN TẮC VÀNG ĐỂ TRÒ CHUYỆN THẬT TỰ NHIÊN (RẤT QUAN TR�
                 }
             } catch(e) {}
 
-            // Mặc định tab mở ra: Nếu tôi là Em -> mở tab chuông Bên Anh để chỉnh cho Anh, và ngược lại
             currentReminderTarget = myRole === 'Em' ? 'boy' : 'girl';
             syncRemindersToUI();
+            updateDualClocks();
         }
 
         function switchReminderTarget(role) {
@@ -6086,8 +6312,77 @@ CÁC NGUYÊN TẮC VÀNG ĐỂ TRÒ CHUYỆN THẬT TỰ NHIÊN (RẤT QUAN TR�
             syncRemindersToUI();
         }
 
+        function changeRemindTimezone(newTz) {
+            const data = remindersData[currentReminderTarget] || remindersData.boy;
+            data.timezone = newTz;
+            saveRemindersConfig();
+            syncFieldToFirebase('reminders', remindersData);
+            syncRemindersToUI();
+            updateDualClocks();
+            const tzInfo = TIMEZONE_CONFIG[newTz] || { label: newTz };
+            showCuteToast(`Đã đổi múi giờ sang: ${tzInfo.label} ✨`, "🌍");
+        }
+
+        function updateReminderConvertedTimes() {
+            const targetTz = remindersData[currentReminderTarget]?.timezone || (currentReminderTarget === 'boy' ? 'Asia/Ho_Chi_Minh' : 'Europe/Berlin');
+            const myTz = remindersData[myRole === 'Anh' ? 'boy' : 'girl']?.timezone || (myRole === 'Anh' ? 'Asia/Ho_Chi_Minh' : 'Europe/Berlin');
+
+            const isDiff = targetTz !== myTz;
+            const diffH = getTimezoneDiffHours(myTz, targetTz);
+            const myRoleLabel = myRole === 'Anh' ? (userNames.boy || 'Anh') : (userNames.girl || 'Em');
+            const targetRoleLabel = currentReminderTarget === 'boy' ? (userNames.boy || 'Anh') : (userNames.girl || 'Em');
+
+            // Update Timezone Selector Header Status
+            const tzDesc = document.getElementById('remindTzDiffDesc');
+            const tzStatus = document.getElementById('remindTzConvertedStatus');
+            const tzFlag = document.getElementById('remindTzFlag');
+            const tzTitle = document.getElementById('remindTzRoleTitle');
+            const tzInfo = TIMEZONE_CONFIG[targetTz] || { flag: '🌐', label: targetTz };
+
+            if (tzFlag) tzFlag.innerText = tzInfo.flag || '🌐';
+            if (tzTitle) tzTitle.innerText = `Múi Giờ Bên ${targetRoleLabel}: ${tzInfo.label || targetTz}`;
+
+            if (tzDesc && tzStatus) {
+                if (!isDiff) {
+                    tzDesc.innerText = "Đang cùng múi giờ với bạn";
+                    tzStatus.innerText = "Cùng múi giờ";
+                } else {
+                    const diffText = diffH > 0 ? `Bên bạn nhanh hơn ${diffH} giờ` : `Bên bạn chậm hơn ${Math.abs(diffH)} giờ`;
+                    tzDesc.innerText = diffText;
+                    tzStatus.innerText = `Lệch ${Math.abs(diffH)} giờ`;
+                }
+            }
+
+            const formatConv = (timeVal) => {
+                if (!isDiff || !timeVal) return '';
+                const conv = convertTimeBetweenTimezones(timeVal, targetTz, myTz);
+                return `≈ ${conv} giờ bên ${myRoleLabel}`;
+            };
+
+            const setFieldText = (id, text) => {
+                const el = document.getElementById(id);
+                if (el) el.innerText = text;
+            };
+
+            const data = remindersData[currentReminderTarget] || remindersData.boy;
+            setFieldText('mealBreakfastConverted', formatConv(data.meals.breakfast));
+            setFieldText('mealLunchConverted', formatConv(data.meals.lunch));
+            setFieldText('mealDinnerConverted', formatConv(data.meals.dinner));
+
+            setFieldText('medMorningConverted', formatConv(data.medicine.morning));
+            setFieldText('medNoonConverted', formatConv(data.medicine.noon || "12:30"));
+            setFieldText('medNightConverted', formatConv(data.medicine.night));
+
+            setFieldText('sleepConverted', formatConv(data.sleep.sleepTime));
+        }
+
         function syncRemindersToUI() {
             const data = remindersData[currentReminderTarget] || remindersData.boy;
+
+            const tzSelect = document.getElementById('selectRemindTimezone');
+            if (tzSelect && data.timezone) {
+                tzSelect.value = data.timezone;
+            }
 
             const wTog = document.getElementById('remindWaterToggle');
             const wInt = document.getElementById('remindWaterInterval');
@@ -6112,7 +6407,7 @@ CÁC NGUYÊN TẮC VÀNG ĐỂ TRÒ CHUYỆN THẬT TỰ NHIÊN (RẤT QUAN TR�
             if (medM) medM.value = data.medicine.morning;
             if (medNoon) medNoon.value = data.medicine.noon || "12:30";
             if (medN) medN.value = data.medicine.night;
-            if (medName) medName.value = data.medicine.medName;
+            if (medName) medName.value = data.medicine.medName || "";
 
             const sTog = document.getElementById('remindSleepToggle');
             const sTime = document.getElementById('sleepTimeInput');
@@ -6120,6 +6415,7 @@ CÁC NGUYÊN TẮC VÀNG ĐỂ TRÒ CHUYỆN THẬT TỰ NHIÊN (RẤT QUAN TR�
             if (sTime) sTime.value = data.sleep.sleepTime;
 
             renderCustomRemindersList();
+            updateReminderConvertedTimes();
         }
 
         function renderCustomRemindersList() {
@@ -6131,22 +6427,39 @@ CÁC NGUYÊN TẮC VÀNG ĐỂ TRÒ CHUYỆN THẬT TỰ NHIÊN (RẤT QUAN TR�
                 container.innerHTML = `<span class="text-[9.5px] text-slate-400 block py-1">Chưa có lời nhắc riêng. Thêm ở bên dưới nha!</span>`;
                 return;
             }
-            container.innerHTML = list.map(item => `
+
+            const targetTz = data.timezone || (currentReminderTarget === 'boy' ? 'Asia/Ho_Chi_Minh' : 'Europe/Berlin');
+            const myTz = remindersData[myRole === 'Anh' ? 'boy' : 'girl']?.timezone || (myRole === 'Anh' ? 'Asia/Ho_Chi_Minh' : 'Europe/Berlin');
+            const isDiff = targetTz !== myTz;
+
+            container.innerHTML = list.map(item => {
+                const convStr = isDiff ? ` <span class="text-[8px] text-hotRose font-semibold">(≈ ${convertTimeBetweenTimezones(item.time, targetTz, myTz)})</span>` : '';
+                return `
                 <div class="p-2 bg-white rounded-xl border border-rose-100 flex items-center justify-between shadow-2xs">
                     <div class="flex items-center gap-2 min-w-0">
-                        <span class="text-[10px] font-black text-rose-500 bg-rose-50 px-1.5 py-0.5 rounded-md border border-rose-200">${item.time}</span>
-                        <span class="text-[10.5px] font-bold text-slate-800 truncate">${item.title}</span>
+                        <span class="text-[10px] font-black text-rose-500 bg-rose-50 px-1.5 py-0.5 rounded-md border border-rose-200 shrink-0">${item.time}</span>
+                        <div class="truncate">
+                            <span class="text-[10.5px] font-bold text-slate-800 truncate block">${item.title}</span>
+                            ${convStr}
+                        </div>
                     </div>
-                    <div class="flex items-center gap-2">
-                        <button onclick="testCustomReminder('${item.id}')" class="text-[8.5px] text-cyan-600 font-bold hover:underline">Thử</button>
-                        <button onclick="deleteCustomReminder('${item.id}')" class="text-slate-400 hover:text-red-500 text-xs">✕</button>
+                    <div class="flex items-center gap-1.5 shrink-0">
+                        <button onclick="sendRemoteBuzzCustom('${item.id}')" class="px-2 py-0.5 bg-gradient-to-r from-pink-500 to-rose-400 text-white font-extrabold text-[8.5px] rounded-lg shadow-2xs spring-btn flex items-center gap-1" title="Bắn chuông ngay sang máy người ấy">
+                            <span>🚀 Bắn</span>
+                        </button>
+                        <button onclick="testCustomReminder('${item.id}')" class="text-[8.5px] text-slate-500 hover:text-rose-500 bg-slate-50 px-1.5 py-0.5 rounded-lg border border-slate-200 spring-btn">Thử</button>
+                        <button onclick="deleteCustomReminder('${item.id}')" class="text-[10px] text-slate-300 hover:text-red-500 transition-colors px-1">✕</button>
                     </div>
                 </div>
-            `).join('');
+            `;
+            }).join('');
         }
 
         function saveRemindersConfig() {
             const data = remindersData[currentReminderTarget] || remindersData.boy;
+
+            const tzSelect = document.getElementById('selectRemindTimezone');
+            if (tzSelect && tzSelect.value) data.timezone = tzSelect.value;
 
             const wTog = document.getElementById('remindWaterToggle');
             const wInt = document.getElementById('remindWaterInterval');
@@ -6203,6 +6516,7 @@ CÁC NGUYÊN TẮC VÀNG ĐỂ TRÒ CHUYỆN THẬT TỰ NHIÊN (RẤT QUAN TR�
 
             titleInput.value = '';
             saveRemindersConfig();
+            syncFieldToFirebase('reminders', remindersData);
             renderCustomRemindersList();
             showCuteToast("Đã thêm lời nhắc mới! ✨", "⏰");
         }
@@ -6211,6 +6525,7 @@ CÁC NGUYÊN TẮC VÀNG ĐỂ TRÒ CHUYỆN THẬT TỰ NHIÊN (RẤT QUAN TR�
             const data = remindersData[currentReminderTarget] || remindersData.boy;
             data.custom = (data.custom || []).filter(c => c.id !== id);
             saveRemindersConfig();
+            syncFieldToFirebase('reminders', remindersData);
             renderCustomRemindersList();
         }
 
@@ -6221,10 +6536,10 @@ CÁC NGUYÊN TẮC VÀNG ĐỂ TRÒ CHUYỆN THẬT TỰ NHIÊN (RẤT QUAN TR�
             triggerLoveBurst();
 
             const targetName = currentReminderTarget === 'boy' ? (userNames.boy || 'Anh') : (userNames.girl || 'Em');
-            showCuteToast(`Đã lưu và đồng bộ lịch nhắc cho ${targetName} thành công! 💖`, "🔔");
+            showCuteToast(`Đã đồng bộ lời nhắc & múi giờ sang máy ${targetName}! 💖`, "🚀");
+            updateDualClocks();
         }
 
-        // HÀM TEST THỬ TỪNG LỜI NHẮC
         function testReminder(type) {
             const data = remindersData[currentReminderTarget] || remindersData.boy;
             const senderName = currentReminderTarget === 'boy' ? (userNames.girl || 'Em yêu') : (userNames.boy || 'Anh yêu');
@@ -6258,18 +6573,143 @@ CÁC NGUYÊN TẮC VÀNG ĐỂ TRÒ CHUYỆN THẬT TỰ NHIÊN (RẤT QUAN TR�
             const item = (data.custom || []).find(c => c.id === id);
             if (!item) return;
             const senderName = currentReminderTarget === 'boy' ? (userNames.girl || 'Em yêu') : (userNames.boy || 'Anh yêu');
-            dispatchPushNotification(`⏰ Lời Nhắn Từ ${senderName}:`, item.title);
+            dispatchPushNotification(`⏰ Lời Nhắc Từ ${senderName}:`, item.title);
         }
 
-        // BỘ KIỂM TRA LỜI NHẮC HÀNG PHÚT DÀNH CHO MÁY CỦA TÔI
-        setInterval(() => {
-            const now = new Date();
-            const curTime = `${now.getHours() < 10 ? '0' + now.getHours() : now.getHours()}:${now.getMinutes() < 10 ? '0' + now.getMinutes() : now.getMinutes()}`;
-            const todayStr = now.toDateString();
+        function sendRemoteBuzzAlert(type) {
+            const target = currentReminderTarget;
+            const targetRoleName = target === 'boy' ? 'Anh' : 'Em';
+            const targetName = target === 'boy' ? (userNames.boy || 'Anh yêu') : (userNames.girl || 'Em yêu');
+            const senderName = myRole === 'Anh' ? (userNames.boy || 'Anh yêu') : (userNames.girl || 'Em yêu');
 
-            // Lấy đúng cấu hình chuông của máy tôi (Anh hoặc Em)
+            let title = `🔔 Lời Nhắn Từ ${senderName}:`;
+            let body = `Người ấy vừa gửi một tiếng chuông yêu thương đến bạn! 💖`;
+
+            if (type === 'water') {
+                title = `💧 ${senderName} Nhắc Uống Nước:`;
+                body = `Uống một ngụm nước ấm cho cơ thể tươi tắn và da dẻ hồng hào nha bạn yêu! 💧✨`;
+            } else if (type === 'meals') {
+                title = `🍚 ${senderName} Nhắc Ăn Cơm:`;
+                body = `Mau nghỉ tay ăn cơm no nê đi nè, không được bỏ bữa đâu đấy nhé! 🥢🍱`;
+            } else if (type === 'medicine') {
+                const mName = remindersData[target]?.medicine?.medName || "Vitamin & Thuốc bổ";
+                title = `💊 ${senderName} Nhắc Uống Thuốc:`;
+                body = `Nhớ uống [${mName}] đúng giờ để luôn mạnh khỏe và tràn đầy năng lượng nha! 🌸`;
+            } else if (type === 'sleep') {
+                title = `🌙 ${senderName} Chúc Ngủ Ngon:`;
+                body = `Khuya rồi, tắt điện thoại đi ngủ sớm giữ gìn sức khỏe nhé, yêu bạn nhiều! 💤✨`;
+            } else if (type === 'wakeUp') {
+                title = `⏰ ${senderName} Đánh Thức:`;
+                body = `Dậy thôi nào bạn yêu ơi! Một ngày mới thật tuyệt vời đang chờ đón hai đứa mình nè! ☀️💖`;
+            } else if (type === 'love') {
+                title = `💖 ${senderName} Bắn Tim:`;
+                body = `Bên này ${senderName} đang nhớ bạn cồn cào! Gửi ngàn nụ hôn yêu thương đến bạn nè! 💕✨`;
+            }
+
+            syncFieldToFirebase('remoteAlert', {
+                id: Date.now(),
+                senderRole: myRole,
+                senderName: senderName,
+                targetRole: targetRoleName,
+                title: title,
+                body: body,
+                timestamp: Date.now()
+            });
+
+            triggerLoveBurst();
+            if (typeof navigator !== 'undefined' && navigator.vibrate) navigator.vibrate([50, 40, 80]);
+            showCuteToast(`Đã bắn chuông sang máy ${targetName}! 🚀✨`, "🔔");
+        }
+
+        function sendRemoteBuzzCustom(id) {
+            const data = remindersData[currentReminderTarget] || remindersData.boy;
+            const item = (data.custom || []).find(c => c.id === id);
+            if (!item) return;
+
+            const target = currentReminderTarget;
+            const targetRoleName = target === 'boy' ? 'Anh' : 'Em';
+            const targetName = target === 'boy' ? (userNames.boy || 'Anh yêu') : (userNames.girl || 'Em yêu');
+            const senderName = myRole === 'Anh' ? (userNames.boy || 'Anh yêu') : (userNames.girl || 'Em yêu');
+
+            syncFieldToFirebase('remoteAlert', {
+                id: Date.now(),
+                senderRole: myRole,
+                senderName: senderName,
+                targetRole: targetRoleName,
+                title: `⏰ Lời Nhắc Từ ${senderName}:`,
+                body: item.title,
+                timestamp: Date.now()
+            });
+
+            triggerLoveBurst();
+            if (typeof navigator !== 'undefined' && navigator.vibrate) navigator.vibrate([50, 40, 80]);
+            showCuteToast(`Đã bắn chuông lời nhắc sang máy ${targetName}! 🚀✨`, "🔔");
+        }
+
+        // BỘ CẬP NHẬT ĐỒNG HỒ ĐÔI YÊU XA (LDR DUAL CLOCK) CHẠY MỖI GIÂY
+        function updateDualClocks() {
+            const boyTz = remindersData.boy?.timezone || 'Asia/Ho_Chi_Minh';
+            const girlTz = remindersData.girl?.timezone || 'Europe/Berlin';
+
+            const now = new Date();
+            const boyTimeStr = getTimeWithSecondsInTimezone(boyTz, now);
+            const girlTimeStr = getTimeWithSecondsInTimezone(girlTz, now);
+
+            const elBoyTime = document.getElementById('dualClockTimeBoy');
+            const elGirlTime = document.getElementById('dualClockTimeGirl');
+            if (elBoyTime) elBoyTime.innerText = boyTimeStr;
+            if (elGirlTime) elGirlTime.innerText = girlTimeStr;
+
+            const boyHour = parseInt(boyTimeStr.split(':')[0], 10);
+            const girlHour = parseInt(girlTimeStr.split(':')[0], 10);
+
+            const elBoyPeriod = document.getElementById('dualClockPeriodBoy');
+            const elGirlPeriod = document.getElementById('dualClockPeriodGirl');
+            if (elBoyPeriod) elBoyPeriod.innerText = getPeriodStatus(boyHour);
+            if (elGirlPeriod) elGirlPeriod.innerText = getPeriodStatus(girlHour);
+
+            const boyInfo = TIMEZONE_CONFIG[boyTz] || { flag: '🇻🇳', label: boyTz, city: 'Việt Nam' };
+            const girlInfo = TIMEZONE_CONFIG[girlTz] || { flag: '🇩🇪', label: girlTz, city: 'Đức' };
+
+            const elBoyFlag = document.getElementById('dualClockFlagBoy');
+            const elGirlFlag = document.getElementById('dualClockFlagGirl');
+            const elBoyCity = document.getElementById('dualClockCityBoy');
+            const elGirlCity = document.getElementById('dualClockCityGirl');
+            const elBoyName = document.getElementById('dualClockNameBoy');
+            const elGirlName = document.getElementById('dualClockNameGirl');
+
+            if (elBoyFlag) elBoyFlag.innerText = boyInfo.flag || '🇻🇳';
+            if (elGirlFlag) elGirlFlag.innerText = girlInfo.flag || '🇩🇪';
+            if (elBoyCity) elBoyCity.innerText = boyInfo.city || boyInfo.label;
+            if (elGirlCity) elGirlCity.innerText = girlInfo.city || girlInfo.label;
+            if (elBoyName) elBoyName.innerText = userNames.boy || 'Anh';
+            if (elGirlName) elGirlName.innerText = userNames.girl || 'Em';
+
+            const diffBadge = document.getElementById('ldrDiffBadge');
+            if (diffBadge) {
+                const diffH = getTimezoneDiffHours(boyTz, girlTz);
+                if (diffH === 0) {
+                    diffBadge.innerText = "🕒 Cùng múi giờ";
+                } else if (diffH > 0) {
+                    diffBadge.innerText = `🕒 Em chậm hơn Anh ${diffH} giờ`;
+                } else {
+                    diffBadge.innerText = `🕒 Em nhanh hơn Anh ${Math.abs(diffH)} giờ`;
+                }
+            }
+        }
+
+        setInterval(updateDualClocks, 1000);
+
+        // BỘ KIỂM TRA LỜI NHẮC HÀNG PHÚT DÀNH CHO MÁY CỦA TÔI (THEO MÚI GIỜ CỦA TÔI)
+        setInterval(() => {
             const myTarget = myRole === 'Anh' ? 'boy' : 'girl';
             const myReminders = remindersData[myTarget] || remindersData.boy;
+            const myTz = myReminders.timezone || (myRole === 'Anh' ? 'Asia/Ho_Chi_Minh' : 'Europe/Berlin');
+
+            // Tính thời gian hiện tại chuẩn xác theo đúng múi giờ của người này
+            const curTime = getTimeInTimezone(myTz);
+            const now = new Date();
+            const todayStr = new Intl.DateTimeFormat('en-CA', { timeZone: myTz }).format(now); // YYYY-MM-DD
             const partnerName = myRole === 'Anh' ? (userNames.girl || 'Em yêu') : (userNames.boy || 'Anh yêu');
 
             // 1. Nhắc bữa ăn
@@ -6286,7 +6726,7 @@ CÁC NGUYÊN TẮC VÀNG ĐỂ TRÒ CHUYỆN THẬT TỰ NHIÊN (RẤT QUAN TR�
                 }
             }
 
-            // 2. Nhắc thuốc & vitamin (3 cữ: Sáng, Trưa, Tối!)
+            // 2. Nhắc thuốc & vitamin
             if (myReminders.medicine.enabled) {
                 const med = myReminders.medicine.medName || "Vitamin & Thuốc bổ";
                 if (curTime === myReminders.medicine.morning && myReminders.medicine.lastMornDate !== todayStr) {
@@ -6304,32 +6744,101 @@ CÁC NGUYÊN TẮC VÀNG ĐỂ TRÒ CHUYỆN THẬT TỰ NHIÊN (RẤT QUAN TR�
             // 3. Nhắc đi ngủ
             if (myReminders.sleep.enabled && curTime === myReminders.sleep.sleepTime && myReminders.sleep.lastSleepDate !== todayStr) {
                 myReminders.sleep.lastSleepDate = todayStr;
-                dispatchPushNotification(`🌙 Lời Chúc Ngủ Ngon:`, `${partnerName} gửi ngàn nụ hôn: Khuya rồi, đi ngủ sớm cho khỏe nha bạn yêu! 💤✨`);
+                dispatchPushNotification(`🌙 Lời Chúc Ngủ Ngon:`, `${partnerName} gửi ngàn nụ hôn: Khuya rồi, đi ngủ sớm cho khỏe đẹp nha bạn yêu! 💤✨`);
             }
 
-            // 4. Lời nhắc tùy chỉnh riêng
-            (myReminders.custom || []).forEach(c => {
-                if (c.enabled && c.time === curTime && c.lastNotifiedDate !== todayStr) {
-                    c.lastNotifiedDate = todayStr;
-                    dispatchPushNotification(`⏰ Lời Nhắn Từ ${partnerName}:`, c.title);
-                }
-            });
+            // 4. Lời nhắc tự thêm
+            if (Array.isArray(myReminders.custom)) {
+                myReminders.custom.forEach(item => {
+                    if (item.enabled && curTime === item.time && item.lastDate !== todayStr) {
+                        item.lastDate = todayStr;
+                        dispatchPushNotification(`⏰ Lời Nhắc Yêu Thương:`, `${partnerName} nhắn: ${item.title}`);
+                    }
+                });
+            }
+        }, 60000);
 
-            // 5. Cập nhật đồng hồ đếm ngày mỗi giây
-            updateLoveDaysCounter();
-        }, 1000);
-    
-        // KHỞI CHẠY LÚC TẢI TRANG
-        setTimeout(() => {
-            updateLoveDaysCounter();
-            renderAvatarsUI();
-            updateWaterDisplay();
-            initRemindersConfig();
-            updateCompassUI();
-        }, 300);
-    
-    
-        // ==================== CHỨC NĂNG ĐẶT LẠI TRẮNG TINH DỮ LIỆU BAN ĐẦU ====================
+        // =========================================
+        // CÂY TÌNH YÊU COOLDOWN ENGINE
+        // =========================================
+        const LOVE_TREE_COOLDOWN_MS = 2 * 60 * 60 * 1000; // 2 giờ mỗi lượt tưới
+
+        function getLoveTreeCooldownStatus() {
+            const now = Date.now();
+            const lastWatered = (myRole === 'Em')
+                ? (parseInt(loveTreeData.lastWateredGirl, 10) || 0)
+                : (parseInt(loveTreeData.lastWateredBoy, 10) || 0);
+            const elapsed = now - lastWatered;
+            const remaining = LOVE_TREE_COOLDOWN_MS - elapsed;
+            return {
+                canWater: remaining <= 0,
+                remainingMs: Math.max(0, remaining)
+            };
+        }
+
+        function formatLoveTreeCountdown(ms) {
+            const totalSecs = Math.floor(ms / 1000);
+            const hours = Math.floor(totalSecs / 3600);
+            const mins = Math.floor((totalSecs % 3600) / 60);
+            const secs = totalSecs % 60;
+            if (hours > 0) {
+                return `${String(hours).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+            }
+            return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+        }
+
+        function updateLoveTreeWaterButtonState() {
+            const btn = document.getElementById('btnWaterLoveTree');
+            const textEl = document.getElementById('btnWaterLoveTreeText');
+            const statusEl = document.getElementById('loveTreeDualCooldownStatus');
+            if (!btn || !textEl) return;
+
+            const myStatus = getLoveTreeCooldownStatus();
+            if (myStatus.canWater) {
+                textEl.innerText = "Tưới Nước Cho Cây (+15 EXP)";
+                btn.classList.remove('opacity-75', 'grayscale-50');
+            } else {
+                textEl.innerText = `⏳ Hồi giọt nước: ${formatLoveTreeCountdown(myStatus.remainingMs)}`;
+                btn.classList.add('opacity-75', 'grayscale-50');
+            }
+
+            if (statusEl) {
+                const now = Date.now();
+                const boyRemaining = Math.max(0, LOVE_TREE_COOLDOWN_MS - (now - (parseInt(loveTreeData.lastWateredBoy, 10) || 0)));
+                const girlRemaining = Math.max(0, LOVE_TREE_COOLDOWN_MS - (now - (parseInt(loveTreeData.lastWateredGirl, 10) || 0)));
+                const nameBoy = userNames.boy || 'Anh';
+                const nameGirl = userNames.girl || 'Em';
+                const boyStr = boyRemaining === 0 ? "Sẵn sàng 💧" : `⏳ ${formatLoveTreeCountdown(boyRemaining)}`;
+                const girlStr = girlRemaining === 0 ? "Sẵn sàng 💧" : `⏳ ${formatLoveTreeCountdown(girlRemaining)}`;
+                statusEl.innerText = `${nameBoy}: ${boyStr} | ${nameGirl}: ${girlStr}`;
+            }
+        }
+
+        setInterval(updateLoveTreeWaterButtonState, 1000);
+
+        function waterLoveTree() {
+            const status = getLoveTreeCooldownStatus();
+            if (!status.canWater) {
+                const remainingStr = formatLoveTreeCountdown(status.remainingMs);
+                showCuteToast(`💧 Cây đang hấp thụ nước! Hãy để mầm cây nghỉ ngơi và quay lại sau ${remainingStr} nhé 🌱💕`, "💧");
+                if (typeof navigator !== 'undefined' && navigator.vibrate) navigator.vibrate(25);
+                return;
+            }
+
+            if (myRole === 'Em') {
+                loveTreeData.lastWateredGirl = Date.now();
+            } else {
+                loveTreeData.lastWateredBoy = Date.now();
+            }
+            loveTreeData.totalWatered = (parseInt(loveTreeData.totalWatered, 10) || 0) + 1;
+
+            addLoveTreeExp(15);
+            triggerLoveBurst();
+            if (typeof navigator !== 'undefined' && navigator.vibrate) navigator.vibrate([40, 20, 60]);
+            showCuteToast("Đã tưới nước cho Cây Tình Yêu! (+15 EXP) 🌱💧", "💧");
+            updateLoveTreeWaterButtonState();
+        }
+        
         function confirmResetAllAppData() {
             if (confirm("⚠️ Bạn có chắc chắn muốn ĐẶT LẠI TRẮNG TOÀN BỘ dữ liệu? Toàn bộ lời nhắc, thú cưng, cây trồng, bình nước và ngày đếm sẽ trở về trạng thái ban đầu tinh khôi!")) {
                 try {
@@ -6734,12 +7243,7 @@ CÁC NGUYÊN TẮC VÀNG ĐỂ TRÒ CHUYỆN THẬT TỰ NHIÊN (RẤT QUAN TR�
             }
         }
 
-        function waterLoveTree() {
-            addLoveTreeExp(15);
-            triggerLoveBurst();
-            if (typeof navigator !== 'undefined' && navigator.vibrate) navigator.vibrate([40, 20, 60]);
-            showCuteToast("Đã tưới nước cho Cây Tình Yêu! (+15 EXP) 🌱💧", "💧");
-        }
+        
 
         function resetLoveTreeToSeed() {
             if (confirm("Bạn có muốn đặt lại Cây Tình Yêu về Cấp 1 (Hạt Mầm Bé Xíu) để cùng nhau chăm sóc lại từ đầu không?")) {
