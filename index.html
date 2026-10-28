@@ -640,7 +640,7 @@
                             </div>
 
                             <!-- Tên / Biệt danh Nam sang xịn -->
-                            <div onclick="openAvatarModal('boy')" class="cursor-pointer spring-btn mt-2.5 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/90 backdrop-blur-md border border-rose-100/90 shadow-2xs hover:shadow-xs transition-all max-w-[110px]" title="Chạm để đổi tên / biệt danh">
+                            <div onclick="openAvatarModal('boy', 'name')" class="cursor-pointer spring-btn mt-2.5 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/90 backdrop-blur-md border border-rose-100/90 shadow-2xs hover:shadow-xs transition-all max-w-[110px]" title="Chạm để đổi tên / biệt danh">
                                 <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0"></span>
                                 <span id="avatarNameBoy" class="text-[11px] font-black text-slate-700 truncate tracking-tight">Anh</span>
                                 <i data-lucide="pencil" class="w-2.5 h-2.5 text-slate-300 shrink-0"></i>
@@ -673,7 +673,7 @@
                             </div>
 
                             <!-- Tên / Biệt danh Nữ sang xịn -->
-                            <div onclick="openAvatarModal('girl')" class="cursor-pointer spring-btn mt-2.5 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/90 backdrop-blur-md border border-rose-100/90 shadow-2xs hover:shadow-xs transition-all max-w-[110px]" title="Chạm để đổi tên / biệt danh">
+                            <div onclick="openAvatarModal('girl', 'name')" class="cursor-pointer spring-btn mt-2.5 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/90 backdrop-blur-md border border-rose-100/90 shadow-2xs hover:shadow-xs transition-all max-w-[110px]" title="Chạm để đổi tên / biệt danh">
                                 <span class="w-1.5 h-1.5 rounded-full bg-pink-400 shrink-0"></span>
                                 <span id="avatarNameGirl" class="text-[11px] font-black text-slate-700 truncate tracking-tight">Em</span>
                                 <i data-lucide="pencil" class="w-2.5 h-2.5 text-slate-300 shrink-0"></i>
@@ -2109,53 +2109,57 @@
             <div class="modal-sheet max-h-[85vh] overflow-y-auto no-scrollbar">
                 <div class="flex justify-between items-center mb-3">
                     <h3 class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
-                        <i data-lucide="camera" class="w-4 h-4 text-hotRose"></i>
-                        <span>Đổi Ảnh Đại Diện Cho <span id="avatarEditRoleText">Anh</span></span>
+                        <i data-lucide="user-pen" class="w-4 h-4 text-hotRose"></i>
+                        <span>Chỉnh Sửa Hồ Sơ (<span id="avatarEditRoleText" class="text-hotRose font-extrabold">Bạn Nam</span>) ✨</span>
                     </h3>
                     <button onclick="closeAvatarModal()" class="text-slate-400 hover:text-slate-600 text-lg spring-btn">✕</button>
                 </div>
 
-                <div class="space-y-3">
-                    <!-- Ảnh xem trước -->
-                    <div class="flex items-center justify-center my-2">
-                        <div class="relative w-20 h-20 rounded-full p-1 bg-gradient-to-tr from-hotRose to-softLilac shadow-lg">
-                            <img id="avatarPreviewImg" src="" class="w-18 h-18 rounded-full object-cover bg-white">
-                        </div>
+                <div class="space-y-3.5">
+                    <!-- Ô ĐỔI TÊN NỔI BẬT LÊN ĐẦU TIÊN -->
+                    <div class="p-3 bg-gradient-to-r from-rose-50 to-pink-50 rounded-2xl border border-rose-100 shadow-2xs">
+                        <label class="block text-[11px] font-extrabold text-slate-700 mb-1.5 flex items-center justify-between">
+                            <span class="flex items-center gap-1"><i data-lucide="pencil" class="w-3 h-3 text-hotRose"></i> Tên Gọi / Biệt Danh:</span>
+                            <span class="text-[9px] font-semibold text-rose-500">Hiển thị dưới ảnh đại diện</span>
+                        </label>
+                        <input type="text" id="avatarNameInput" placeholder="Ví dụ: Anh yêu, Em bé, Tuấn, Trang..." class="w-full px-3.5 py-2.5 bg-white rounded-xl border border-rose-200 text-xs font-bold text-slate-800 focus:outline-none focus:border-hotRose focus:ring-2 focus:ring-rose-200 shadow-2xs" onkeydown="if(event.key==='Enter') saveAvatarChanges()">
                     </div>
 
-                    <!-- Tên gọi hiển thị -->
-                    <div>
-                        <label class="block text-[10px] font-bold text-slate-600 mb-1">Tên Gọi / Biệt Danh:</label>
-                        <input type="text" id="avatarNameInput" placeholder="Ví dụ: Anh yêu / Em bé..." class="w-full px-3 py-2 bg-white rounded-xl border border-rose-200 text-xs text-slate-800 focus:outline-none focus:border-hotRose">
+                    <!-- Ảnh xem trước -->
+                    <div class="flex flex-col items-center justify-center pt-1">
+                        <p class="text-[10px] font-bold text-slate-600 mb-1.5">Ảnh Đại Diện Hiện Tại:</p>
+                        <div class="relative w-20 h-20 rounded-full p-1 bg-gradient-to-tr from-hotRose to-softLilac shadow-md">
+                            <img id="avatarPreviewImg" src="" class="w-full h-full rounded-full object-cover bg-white">
+                        </div>
                     </div>
 
                     <!-- Cách 1: Tải ảnh từ máy -->
                     <div>
-                        <label class="block text-[10px] font-bold text-slate-600 mb-1">Tải Ảnh Từ Điện Thoại / Máy Tính:</label>
+                        <label class="block text-[10px] font-bold text-slate-600 mb-1">Cách 1: Tải Ảnh Từ Điện Thoại / Máy Tính:</label>
                         <input type="file" id="avatarFileInput" accept="image/*" class="w-full text-xs text-slate-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-[10px] file:font-bold file:bg-rose-50 file:text-hotRose hover:file:bg-rose-100" onchange="handleAvatarFileUpload(event)">
                     </div>
 
                     <!-- Cách 2: Dán link online -->
                     <div>
-                        <label class="block text-[10px] font-bold text-slate-600 mb-1">Hoặc Dán Link Ảnh Online (URL):</label>
-                        <input type="url" id="avatarUrlInput" placeholder="https://example.com/anh.jpg" class="w-full px-3 py-2 bg-white rounded-xl border border-rose-200 text-xs text-slate-800 focus:outline-none focus:border-hotRose" oninput="previewAvatarUrl(this.value)">
+                        <label class="block text-[10px] font-bold text-slate-600 mb-1">Cách 2: Hoặc Dán Link Ảnh Online (URL):</label>
+                        <input type="url" id="avatarUrlInput" placeholder="https://..." class="w-full px-3 py-2 bg-white rounded-xl border border-rose-200 text-xs text-slate-800 focus:outline-none focus:border-hotRose" oninput="previewAvatarUrl(this.value)">
                     </div>
 
                     <!-- Cách 3: Chọn Chibi có sẵn -->
                     <div>
-                        <label class="block text-[10px] font-bold text-slate-600 mb-1">Hoặc Chọn Avatar Chibi Hoạt Hình:</label>
+                        <label class="block text-[10px] font-bold text-slate-600 mb-1">Cách 3: Hoặc Chọn Avatar Hoạt Hình:</label>
                         <div class="grid grid-cols-4 gap-2" id="presetAvatarsGrid">
                             <!-- RENDER PRESET AVATARS -->
                         </div>
                     </div>
 
-                    <button onclick="saveAvatarChanges()" class="w-full py-2.5 bg-gradient-to-r from-hotRose to-rose-400 text-white font-extrabold rounded-xl text-xs shadow-md spring-btn">
-                        Lưu Ảnh Đại Diện ✨
+                    <button onclick="saveAvatarChanges()" class="w-full py-2.5 bg-gradient-to-r from-hotRose to-rose-400 text-white font-extrabold rounded-xl text-xs shadow-md spring-btn flex items-center justify-center gap-1.5">
+                        <i data-lucide="check" class="w-4 h-4"></i>
+                        <span>Lưu Tên & Ảnh Đại Diện 💖</span>
                     </button>
                 </div>
             </div>
         </div>
-
         <!-- ===================== MODAL CHỌN VỊ TRÍ NHANH CHO LA BÀN ===================== -->
         <div id="quickStatusModal" class="modal-overlay" onclick="closeModalsOnBackdrop(event)">
             <div class="modal-sheet">
@@ -2444,21 +2448,24 @@
                 }
 
                 // 3. Đồng bộ tên và ảnh đại diện
-                if (data.userNames) {
-                    userNames = { ...userNames, ...data.userNames };
-                    localStorage.setItem('LOVE_NAME_BOY', userNames.boy);
-                    localStorage.setItem('LOVE_NAME_GIRL', userNames.girl);
+                const remoteNames = data.userNames || (data.avatars && data.avatars.userNames);
+                if (remoteNames) {
+                    userNames = { ...userNames, ...remoteNames };
+                    if (userNames.boy) localStorage.setItem('LOVE_NAME_BOY', userNames.boy);
+                    if (userNames.girl) localStorage.setItem('LOVE_NAME_GIRL', userNames.girl);
                 }
-                if (data.userAvatars) {
-                    userAvatars = { ...userAvatars, ...data.userAvatars };
-                    localStorage.setItem('LOVE_AVATAR_BOY', userAvatars.boy);
-                    localStorage.setItem('LOVE_AVATAR_GIRL', userAvatars.girl);
+                const remoteAvatars = data.userAvatars || (data.avatars && data.avatars.userAvatars);
+                if (remoteAvatars) {
+                    userAvatars = { ...userAvatars, ...remoteAvatars };
+                    if (userAvatars.boy) localStorage.setItem('LOVE_AVATAR_BOY', userAvatars.boy);
+                    if (userAvatars.girl) localStorage.setItem('LOVE_AVATAR_GIRL', userAvatars.girl);
                 }
                 renderAvatarsUI();
 
                 // 4. Đồng bộ ngày bắt đầu yêu
-                if (data.startDate && data.startDate !== loveStartDate) {
-                    loveStartDate = data.startDate;
+                const remoteDate = data.startDate || data.loveStartDate;
+                if (remoteDate && remoteDate !== loveStartDate) {
+                    loveStartDate = remoteDate;
                     localStorage.setItem('LOVE_START_DATE', loveStartDate);
                     updateLoveDaysCounter();
                 }
@@ -5393,8 +5400,17 @@ CÁC NGUYÊN TẮC VÀNG ĐỂ TRÒ CHUYỆN THẬT TỰ NHIÊN (RẤT QUAN TR�
         const todayIsoStr = new Date().toISOString().split('T')[0];
         let loveStartDate = localStorage.getItem('LOVE_START_DATE') || todayIsoStr;
 
+        function parseLocalDate(dateStr) {
+            if (!dateStr) return new Date();
+            const parts = dateStr.split('-');
+            if (parts.length === 3) {
+                return new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+            }
+            return new Date(dateStr);
+        }
+
         function updateLoveDaysCounter() {
-            const start = new Date(loveStartDate);
+            const start = parseLocalDate(loveStartDate);
             const now = new Date();
             const diffTime = now.getTime() - start.getTime();
             const diffDays = Math.max(0, Math.floor(diffTime / (1000 * 60 * 60 * 24)));
@@ -5404,8 +5420,10 @@ CÁC NGUYÊN TẮC VÀNG ĐỂ TRÒ CHUYỆN THẬT TỰ NHIÊN (RẤT QUAN TR�
 
             const dispEl = document.getElementById('loveStartDateDisplay');
             if (dispEl) {
-                const dateFormatted = start.toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' });
-                dispEl.innerText = `Bắt đầu từ: ${dateFormatted} (Chạm để đổi 📅)`;
+                const dayStr = String(start.getDate()).padStart(2, '0');
+                const monthStr = String(start.getMonth() + 1).padStart(2, '0');
+                const yearStr = start.getFullYear();
+                dispEl.innerText = `Bắt đầu từ: ${dayStr}/${monthStr}/${yearStr} (Chạm để đổi 📅)`;
             }
 
             const hEl = document.getElementById('liveHours');
@@ -5424,7 +5442,8 @@ CÁC NGUYÊN TẮC VÀNG ĐỂ TRÒ CHUYỆN THẬT TỰ NHIÊN (RẤT QUAN TR�
             if (input) {
                 input.value = loveStartDate;
                 input.oninput = () => {
-                    const previewStart = new Date(input.value);
+                    if (!input.value) return;
+                    const previewStart = parseLocalDate(input.value);
                     const now = new Date();
                     const diffDays = Math.max(0, Math.floor((now.getTime() - previewStart.getTime()) / (1000 * 60 * 60 * 24)));
                     const pEl = document.getElementById('previewDaysCount');
@@ -5433,7 +5452,7 @@ CÁC NGUYÊN TẮC VÀNG ĐỂ TRÒ CHUYỆN THẬT TỰ NHIÊN (RẤT QUAN TR�
             }
             const pEl = document.getElementById('previewDaysCount');
             if (pEl) {
-                const start = new Date(loveStartDate);
+                const start = parseLocalDate(loveStartDate);
                 const diffDays = Math.max(0, Math.floor((new Date().getTime() - start.getTime()) / (1000 * 60 * 60 * 24)));
                 pEl.innerText = `${diffDays} Ngày`;
             }
@@ -5445,10 +5464,17 @@ CÁC NGUYÊN TẮC VÀNG ĐỂ TRÒ CHUYỆN THẬT TỰ NHIÊN (RẤT QUAN TR�
 
         function saveLoveStartDate() {
             const input = document.getElementById('inputLoveStartDate');
-            if (!input || !input.value) return;
+            if (!input || !input.value) {
+                showCuteToast("Vui lòng chọn ngày kỷ niệm!", "⚠️");
+                return;
+            }
             loveStartDate = input.value;
             localStorage.setItem('LOVE_START_DATE', loveStartDate);
+            
+            // Đồng bộ cả 2 key lên Firebase Realtime
+            syncFieldToFirebase('startDate', loveStartDate);
             syncFieldToFirebase('loveStartDate', loveStartDate);
+
             updateLoveDaysCounter();
             closeLoveStartDateModal();
             triggerLoveBurst();
@@ -5489,23 +5515,32 @@ CÁC NGUYÊN TẮC VÀNG ĐỂ TRÒ CHUYỆN THẬT TỰ NHIÊN (RẤT QUAN TR�
 
             if (imgBoy) imgBoy.src = userAvatars.boy;
             if (imgGirl) imgGirl.src = userAvatars.girl;
-            if (nameBoy) nameBoy.innerText = userNames.boy;
-            if (nameGirl) nameGirl.innerText = userNames.girl;
+            if (nameBoy) nameBoy.innerText = userNames.boy || 'Anh';
+            if (nameGirl) nameGirl.innerText = userNames.girl || 'Em';
         }
 
-        function openAvatarModal(role) {
+        function openAvatarModal(role, focusTarget = 'all') {
             currentEditingRole = role;
             const titleRole = document.getElementById('avatarEditRoleText');
-            if (titleRole) titleRole.innerText = role === 'boy' ? 'Bạn Nam' : 'Bạn Nữ';
+            const roleName = userNames[role] || (role === 'boy' ? 'Bạn Nam' : 'Bạn Nữ');
+            if (titleRole) titleRole.innerText = roleName;
 
             const preview = document.getElementById('avatarPreviewImg');
-            if (preview) preview.src = userAvatars[role];
+            if (preview) preview.src = userAvatars[role] || '';
 
             const nameInput = document.getElementById('avatarNameInput');
-            if (nameInput) nameInput.value = userNames[role];
+            if (nameInput) {
+                nameInput.value = userNames[role] || '';
+            }
 
             const urlInput = document.getElementById('avatarUrlInput');
-            if (urlInput) urlInput.value = userAvatars[role].startsWith('http') ? userAvatars[role] : '';
+            if (urlInput) {
+                const cur = userAvatars[role] || '';
+                urlInput.value = cur.startsWith('http') ? cur : '';
+            }
+
+            const fileInput = document.getElementById('avatarFileInput');
+            if (fileInput) fileInput.value = '';
 
             // Render presets
             const grid = document.getElementById('presetAvatarsGrid');
@@ -5519,6 +5554,14 @@ CÁC NGUYÊN TẮC VÀNG ĐỂ TRÒ CHUYỆN THẬT TỰ NHIÊN (RẤT QUAN TR�
             }
 
             document.getElementById('avatarEditModal').classList.add('active');
+            if (window.lucide && lucide.createIcons) lucide.createIcons();
+
+            if (focusTarget === 'name' && nameInput) {
+                setTimeout(() => {
+                    nameInput.focus();
+                    nameInput.select();
+                }, 200);
+            }
         }
         function closeAvatarModal() {
             document.getElementById('avatarEditModal').classList.remove('active');
@@ -5574,22 +5617,34 @@ CÁC NGUYÊN TẮC VÀNG ĐỂ TRÒ CHUYỆN THẬT TỰ NHIÊN (RẤT QUAN TR�
         function saveAvatarChanges() {
             const preview = document.getElementById('avatarPreviewImg');
             const nameInput = document.getElementById('avatarNameInput');
-            if (preview && preview.src) {
+            
+            if (nameInput) {
+                const newName = nameInput.value.trim();
+                if (newName) {
+                    userNames[currentEditingRole] = newName;
+                    localStorage.setItem('LOVE_NAME_' + currentEditingRole.toUpperCase(), newName);
+                }
+            }
+
+            if (preview && preview.src && preview.src.length > 5) {
                 userAvatars[currentEditingRole] = preview.src;
                 localStorage.setItem('LOVE_AVATAR_' + currentEditingRole.toUpperCase(), preview.src);
             }
-            if (nameInput && nameInput.value) {
-                userNames[currentEditingRole] = nameInput.value.trim();
-                localStorage.setItem('LOVE_NAME_' + currentEditingRole.toUpperCase(), userNames[currentEditingRole]);
-            }
 
+            // Đồng bộ trực tiếp các key lên Firebase Realtime
+            syncFieldToFirebase('userNames', userNames);
+            syncFieldToFirebase('userAvatars', userAvatars);
             syncFieldToFirebase('avatars', { userAvatars, userNames });
+
             renderAvatarsUI();
             closeAvatarModal();
             triggerLoveBurst();
-            showCuteToast(`Đã cập nhật ảnh đại diện thành công! ✨`, "🖼️");
+            showCuteToast(`Đã lưu hồ sơ cho ${userNames[currentEditingRole]}! ✨`, "💖");
         }
 
+        // Tự động khởi tạo ngay khi nạp script
+        renderAvatarsUI();
+        updateLoveDaysCounter();
         // 3. LA BÀN TRÁI TIM ĐỊNH VỊ GPS THỰC TẾ
         let myLocation = null;
         let partnerLocation = null;
