@@ -2478,7 +2478,8 @@
                 // 7. Đồng bộ ghi chú dán tường
                 // 8. Đồng bộ 100 điều cùng làm
                 if (data.bucketList && Array.isArray(data.bucketList)) {
-                    bucketList = data.bucketList;
+                    bucketItems = data.bucketList;
+                    localStorage.setItem("LOVE_BUCKET_DATA", JSON.stringify(bucketItems));
                     renderBucketList();
                 }
 
@@ -3515,18 +3516,36 @@ CÁC NGUYÊN TẮC VÀNG ĐỂ TRÒ CHUYỆN THẬT TỰ NHIÊN (RẤT QUAN TR�
 
         function renderBucketList() {
             const container = document.getElementById('bucketListContainer');
+            if (!container) return;
             container.innerHTML = '';
             const doneCount = bucketItems.filter(b => b.done).length;
-            document.getElementById('bucketStatsBadge').innerText = `${doneCount}/${bucketItems.length}`;
+            const badge = document.getElementById('bucketStatsBadge');
+            if (badge) badge.innerText = `${doneCount}/${bucketItems.length}`;
 
-            bucketItems.forEach((b, idx) => {
+            if (bucketItems.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-8 text-slate-400 text-xs">
+                        <p class="text-3xl mb-1.5">📝</p>
+                        <p class="font-medium text-slate-600">Chưa có điều ước nào trong danh sách</p>
+                        <p class="text-[10px] text-slate-400 mt-1">Hãy bấm nút "+ Thêm điều ước" ở trên để tạo điều ước đầu tiên nhé!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            bucketItems.forEach((b) => {
                 const card = document.createElement('div');
-                card.className = "p-3.5 rounded-2xl bg-white/95 border border-rose-100 shadow-sm space-y-2";
+                card.className = "p-3.5 rounded-2xl bg-white/95 border border-rose-100 shadow-sm space-y-2 transition-all";
                 
                 let photosHtml = '';
                 if (b.photos && b.photos.length > 0) {
                     photosHtml = `<div class="flex space-x-2 pt-1 overflow-x-auto">
-                        ${b.photos.map(p => `<img src="${p}" class="w-16 h-16 rounded-xl object-cover border border-white shadow-sm shrink-0">`).join('')}
+                        ${b.photos.map((p, pIdx) => `
+                            <div class="relative shrink-0 group">
+                                <img src="${p}" class="w-16 h-16 rounded-xl object-cover border border-white shadow-sm">
+                                <button onclick="deleteBucketPhoto(${b.id}, ${pIdx})" class="absolute -top-1 -right-1 w-5 h-5 bg-black/60 hover:bg-rose-500 text-white rounded-full flex items-center justify-center text-xs shadow transition-colors" title="Xóa ảnh này">×</button>
+                            </div>
+                        `).join('')}
                     </div>`;
                 }
 
@@ -3534,15 +3553,18 @@ CÁC NGUYÊN TẮC VÀNG ĐỂ TRÒ CHUYỆN THẬT TỰ NHIÊN (RẤT QUAN TR�
                     <div class="flex items-center justify-between">
                         <div class="flex items-center space-x-2.5 flex-1 mr-2">
                             <button onclick="toggleBucketDone(${b.id})" class="w-6 h-6 rounded-full ${b.done ? 'bg-emerald-500 text-white' : 'border-2 border-slate-300 text-transparent'} flex items-center justify-center text-xs font-bold shrink-0">✓</button>
-                            <div>
-                                <p class="text-xs font-bold ${b.done ? 'text-slate-400 line-through' : 'text-slate-700'}">${b.title}</p>
+                            <div class="flex-1 min-w-0">
+                                <p class="text-xs font-bold truncate ${b.done ? 'text-slate-400 line-through' : 'text-slate-700'}">${b.title}</p>
                                 <span class="text-[10px] text-slate-400">${b.done ? 'Hoàn thành ' + (b.date || '') : 'Chạm vòng tròn để tick hoàn thành'}</span>
                             </div>
                         </div>
                         <div class="flex items-center space-x-1 shrink-0">
-                            <button onclick="openAttachPhotoModal(${b.id})" class="p-1 text-hotRose bg-rose-50 hover:bg-rose-100 rounded-lg text-xs font-bold flex items-center gap-0.5">
+                            <button onclick="openAttachPhotoModal(${b.id})" class="p-1.5 text-hotRose bg-rose-50 hover:bg-rose-100 rounded-lg text-xs font-bold flex items-center gap-0.5 spring-btn" title="Gắn ảnh kỷ niệm">
                                 <i data-lucide="camera" class="w-3.5 h-3.5"></i>
                                 <span class="text-[10px]">Ảnh</span>
+                            </button>
+                            <button onclick="deleteBucketItem(${b.id})" class="p-1.5 text-slate-400 hover:text-rose-500 hover:bg-rose-50 rounded-lg transition-colors spring-btn" title="Xóa điều ước này">
+                                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
                             </button>
                         </div>
                     </div>
@@ -3565,7 +3587,32 @@ CÁC NGUYÊN TẮC VÀNG ĐỂ TRÒ CHUYỆN THẬT TỰ NHIÊN (RẤT QUAN TR�
                     showCuteToast("Chúc mừng hai bạn đã hoàn thành 1 cột mốc!", "🎉");
                 }
                 localStorage.setItem('LOVE_BUCKET_DATA', JSON.stringify(bucketItems));
+                syncFieldToFirebase('bucketList', bucketItems);
                 renderBucketList();
+            }
+        }
+
+        function deleteBucketItem(id) {
+            const item = bucketItems.find(i => i.id === id);
+            if (!item) return;
+            if (confirm(`Bạn có chắc muốn xóa điều ước "${item.title}" không?`)) {
+                bucketItems = bucketItems.filter(i => i.id !== id);
+                localStorage.setItem('LOVE_BUCKET_DATA', JSON.stringify(bucketItems));
+                syncFieldToFirebase('bucketList', bucketItems);
+                renderBucketList();
+                showCuteToast("Đã xóa điều ước thành công!", "🗑️");
+            }
+        }
+
+        function deleteBucketPhoto(bucketId, photoIndex) {
+            const b = bucketItems.find(i => i.id === bucketId);
+            if (!b || !b.photos || !b.photos[photoIndex]) return;
+            if (confirm("Bạn có chắc muốn xóa ảnh kỷ niệm này không?")) {
+                b.photos.splice(photoIndex, 1);
+                localStorage.setItem('LOVE_BUCKET_DATA', JSON.stringify(bucketItems));
+                syncFieldToFirebase('bucketList', bucketItems);
+                renderBucketList();
+                showCuteToast("Đã xóa ảnh kỷ niệm!", "🗑️");
             }
         }
 
@@ -3590,6 +3637,7 @@ CÁC NGUYÊN TẮC VÀNG ĐỂ TRÒ CHUYỆN THẬT TỰ NHIÊN (RẤT QUAN TR�
             });
 
             localStorage.setItem('LOVE_BUCKET_DATA', JSON.stringify(bucketItems));
+            syncFieldToFirebase('bucketList', bucketItems);
             renderBucketList();
             closeAddBucketModal();
             document.getElementById('newBucketTitle').value = '';
@@ -3635,6 +3683,7 @@ CÁC NGUYÊN TẮC VÀNG ĐỂ TRÒ CHUYỆN THẬT TỰ NHIÊN (RẤT QUAN TR�
                 b.photos.push(tempPhotoDataUrl);
                 b.done = true;
                 localStorage.setItem('LOVE_BUCKET_DATA', JSON.stringify(bucketItems));
+                syncFieldToFirebase('bucketList', bucketItems);
                 renderBucketList();
                 closeAttachPhotoModal();
                 showCuteToast("Đã lưu ảnh kỷ niệm ngọt ngào!", "📸");
