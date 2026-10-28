@@ -2809,6 +2809,7 @@
 
                 // 10. Đồng bộ chu kỳ con gái
                 if (data.period && data.period.lastDate) {
+                    localStorage.setItem('LOVE_PERIOD_DATA', JSON.stringify(data.period));
                     const inputP = document.getElementById('inputLastPeriod');
                     const inputC = document.getElementById('inputCycleLength');
                     if (inputP) inputP.value = data.period.lastDate;
@@ -3776,19 +3777,37 @@ CÁC NGUYÊN TẮC VÀNG ĐỂ TRÒ CHUYỆN THẬT TỰ NHIÊN (RẤT QUAN TR�
         }
 
         function initPeriodTracker() {
-            const today = new Date();
-            const sampleLastPeriod = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 25);
-            const yyyy = sampleLastPeriod.getFullYear();
-            const mm = String(sampleLastPeriod.getMonth() + 1).padStart(2, '0');
-            const dd = String(sampleLastPeriod.getDate()).padStart(2, '0');
-            document.getElementById('inputLastPeriod').value = `${yyyy}-${mm}-${dd}`;
-            updatePeriodPrediction();
+            const saved = JSON.parse(localStorage.getItem('LOVE_PERIOD_DATA') || 'null');
+            if (saved && saved.lastDate) {
+                const inputP = document.getElementById('inputLastPeriod');
+                const inputC = document.getElementById('inputCycleLength');
+                if (inputP) inputP.value = saved.lastDate;
+                if (inputC && saved.cycleLength) inputC.value = saved.cycleLength;
+            } else {
+                const today = new Date();
+                const sampleLastPeriod = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 25);
+                const yyyy = sampleLastPeriod.getFullYear();
+                const mm = String(sampleLastPeriod.getMonth() + 1).padStart(2, '0');
+                const dd = String(sampleLastPeriod.getDate()).padStart(2, '0');
+                const inputP = document.getElementById('inputLastPeriod');
+                if (inputP) inputP.value = `${yyyy}-${mm}-${dd}`;
+            }
+            updatePeriodPrediction(false);
         }
 
-        function updatePeriodPrediction() {
+        function updatePeriodPrediction(shouldSync = true) {
             const dateVal = document.getElementById('inputLastPeriod').value;
             const cycleLen = parseInt(document.getElementById('inputCycleLength').value) || 28;
             if (!dateVal) return;
+
+            // Lưu vào localStorage
+            const periodPayload = { lastDate: dateVal, cycleLength: cycleLen, updatedAt: Date.now(), updatedBy: (typeof myRole !== 'undefined' ? myRole : 'Người dùng') };
+            localStorage.setItem('LOVE_PERIOD_DATA', JSON.stringify(periodPayload));
+
+            // Đồng bộ sang Firebase cho người yêu
+            if (shouldSync && typeof syncFieldToFirebase === 'function') {
+                syncFieldToFirebase('period', periodPayload);
+            }
 
             const [y, m, d] = dateVal.split('-').map(Number);
             const lastDate = new Date(y, m - 1, d);
