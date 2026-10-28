@@ -541,7 +541,7 @@
     
 
     <!-- APPLE LIQUID GLASS DYNAMIC ISLAND NOTIFICATION BANNER -->
-    <div id="dynamicIslandNotif" class="fixed top-3 left-1/2 -translate-x-1/2 w-[92%] max-w-[390px] glass-card rounded-3xl p-3 z-50 shadow-2xl border border-white/95 flex items-center justify-between transition-all duration-500 -translate-y-36 pointer-events-none opacity-0">
+    <div id="dynamicIslandNotif" style="top: max(58px, calc(env(safe-area-inset-top, 0px) + 14px)); z-index: 99999;" class="fixed left-1/2 -translate-x-1/2 w-[92%] max-w-[390px] glass-card rounded-3xl p-3 shadow-2xl border border-white/95 flex items-center justify-between transition-all duration-500 -translate-y-56 pointer-events-none opacity-0">
         <div class="flex items-center space-x-2.5 truncate mr-2">
             <div class="w-10 h-10 rounded-full bg-pink-100 p-0.5 border border-rose-200 shrink-0 flex items-center justify-center shadow-inner">
                 <img src="./images/mochi-192.png" class="w-8 h-8 rounded-full object-cover">
@@ -1370,53 +1370,36 @@
             <!-- ===================== TAB 4: MÁY CHỌN ĐIỂM HẸN HÒ (3 BĂNG CUỘN CHẠY MƯỢT MÀ) ===================== -->
             <div id="tab-game" class="content-scrollable">
                 
-                <!-- CÂY TÌNH YÊU NỞ HOA -->
+                <!-- CÂY TÌNH YÊU REALTIME DYNAMIC -->
                 <div class="glass-card rounded-[28px] p-5 mb-3.5 text-center relative overflow-hidden">
                     <div class="flex justify-between items-center mb-1">
                         <div class="flex items-center space-x-2">
                             <span class="text-lg">✨</span>
-                            <h4 class="text-xs font-bold text-slate-800">Cây Tình Yêu (Cấp 3 - Nở Hoa)</h4>
+                            <h4 class="text-xs font-bold text-slate-800" id="loveTreeTitle">Cây Tình Yêu (Cấp 1 - Hạt Mầm) 🌱</h4>
                         </div>
-                        <span class="text-[10px] font-extrabold text-pink-600 bg-pink-50 px-2.5 py-0.5 rounded-full border border-pink-200">
-                            75/100 EXP 💖
+                        <span id="loveTreeExpBadge" class="text-[10px] font-extrabold text-pink-600 bg-pink-50 px-2.5 py-0.5 rounded-full border border-pink-200">
+                            0/100 EXP 💖
                         </span>
                     </div>
 
-                    <div class="relative w-40 h-40 mx-auto my-1 flex items-center justify-center">
-                        <svg viewBox="0 0 200 200" class="w-full h-full tree-sway">
-                            <ellipse cx="100" cy="180" rx="42" ry="10" fill="#E2E8F0"/>
-                            <path d="M 68 135 L 132 135 L 122 178 L 78 178 Z" fill="#FFCCD5" stroke="#FFAAA6" stroke-width="2.5"/>
-                            <ellipse cx="100" cy="135" rx="32" ry="7" fill="#FFB3C6"/>
-                            <path d="M 95 155 A 4 4 0 0 1 100 151 A 4 4 0 0 1 105 155 Q 100 163 100 163 Q 95 163 95 155 Z" fill="#FF4D6D"/>
-                            <path d="M 100 135 Q 92 105 102 75 Q 106 65 100 50" fill="none" stroke="#A78BFA" stroke-width="6" stroke-linecap="round"/>
-                            <path d="M 98 100 Q 120 90 128 78" fill="none" stroke="#C4B5FD" stroke-width="4.5" stroke-linecap="round"/>
-                            <path d="M 98 88 Q 78 80 72 70" fill="none" stroke="#C4B5FD" stroke-width="4.5" stroke-linecap="round"/>
-                            <circle cx="100" cy="45" r="22" fill="#FBCFE8" opacity="0.9"/>
-                            <circle cx="128" cy="74" r="17" fill="#DDD6FE" opacity="0.9"/>
-                            <circle cx="70" cy="68" r="16" fill="#FCE7F3" opacity="0.9"/>
-                            <g class="flower-glow">
-                                <circle cx="100" cy="42" r="9" fill="#FF4D6D"/>
-                                <circle cx="94" cy="38" r="6" fill="#FF758F"/>
-                                <circle cx="106" cy="38" r="6" fill="#FF758F"/>
-                                <circle cx="95" cy="47" r="6" fill="#FF758F"/>
-                                <circle cx="105" cy="47" r="6" fill="#FF758F"/>
-                                <circle cx="100" cy="42" r="4" fill="#FEF08A"/>
-                            </g>
-                            <g class="flower-glow" style="animation-delay: 1s;">
-                                <circle cx="128" cy="72" r="7" fill="#FF4D6D"/>
-                                <circle cx="128" cy="72" r="3" fill="#FEF08A"/>
-                            </g>
-                        </svg>
-                        <span class="absolute top-2 right-4 text-xs animate-ping">✨</span>
-                        <span class="absolute top-8 left-4 text-xs animate-pulse">🌸</span>
+                    <div class="relative w-40 h-40 mx-auto my-1 flex items-center justify-center" id="loveTreeSvgContainer">
+                        <!-- RENDER DYNAMIC TREE SVG BASED ON LEVEL -->
                     </div>
 
-                    <p class="text-xs text-slate-600 font-medium leading-relaxed">
-                        Mỗi khi 2 đứa uống đủ nước và gửi lời nhắn, cây sẽ lớn thêm và bung tỏa thêm hoa trái tim! 🌸
+                    <p class="text-xs text-slate-600 font-medium leading-relaxed" id="loveTreeDesc">
+                        Mầm non vừa được gieo! Hai đứa hãy cùng nhau uống nước và bắn tim để mầm nhỏ lớn dần nhé! 🌸
                     </p>
 
                     <div class="w-full h-2.5 rounded-full bg-pink-100/80 p-0.5 border border-pink-200 mt-2 overflow-hidden">
-                        <div class="h-full rounded-full bg-gradient-to-r from-pink-400 via-rose-400 to-purple-400" style="width: 75%"></div>
+                        <div id="loveTreeProgressBar" class="h-full rounded-full bg-gradient-to-r from-pink-400 via-rose-400 to-purple-400 transition-all duration-500" style="width: 0%"></div>
+                    </div>
+
+                    <!-- Nút tương tác tưới cây -->
+                    <div class="mt-3 flex justify-center gap-2">
+                        <button onclick="waterLoveTree()" class="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-pink-500 to-rose-400 text-white font-extrabold text-[11px] spring-btn shadow-sm flex items-center gap-1.5">
+                            <span>💧</span>
+                            <span>Tưới Nước Cho Cây (+15 EXP)</span>
+                        </button>
                     </div>
                 </div>
 
@@ -1948,7 +1931,7 @@
                     </button>
                 </div>
             </div>
-        </div>
+        <!-- ===================== MODAL KẾT NỐI REALTIME (HỖ TRỢ KHÓA PHÒNG & RỜI PHÒNG) ===================== -->
         <div id="firebaseModal" class="modal-overlay" onclick="closeModalsOnBackdrop(event)">
             <div class="modal-sheet max-h-[85vh] overflow-y-auto no-scrollbar">
                 <div class="flex justify-between items-center mb-3">
@@ -1960,29 +1943,32 @@
                 </div>
 
                 <div class="space-y-3.5 text-xs">
-                    <!-- Banner hướng dẫn ngọt ngào -->
-                    <div class="p-2.5 rounded-2xl bg-rose-50 border border-rose-200/80 text-[11px] text-rose-800 leading-relaxed flex items-start gap-2">
+                    <!-- Banner hướng dẫn -->
+                    <div class="p-2.5 rounded-2xl bg-rose-50 border border-rose-200/80 text-[11px] text-rose-800 flex items-center gap-2">
                         <span class="text-base leading-none">💌</span>
-                        <p>Chỉ cần <b>nhập chung 1 Mã phòng</b> bên dưới, mọi hành động (bắn tim, uống nước, nông trại, lời nhắc) sẽ <b>tự động đồng bộ tức thì</b> giữa 2 máy!</p>
+                        <p>Chỉ cần <b>nhập chung 1 Mã phòng</b>, mọi hành động (bắn tim, uống nước, nông trại, điều ước, lời nhắc...) sẽ đồng bộ tức thì sang máy nhau!</p>
                     </div>
+
+                    <!-- THẺ TRẠNG THÁI: KHÓA PHÒNG / CHƯA KẾT NỐI -->
+                    <div id="pairStatusContainer"></div>
 
                     <!-- BƯỚC 1: MÃ PHÒNG CẶP ĐÔI -->
                     <div class="p-3 bg-white rounded-2xl border border-rose-100 shadow-2xs space-y-2">
                         <div class="flex justify-between items-center">
                             <label class="text-[11px] font-bold text-slate-700 flex items-center gap-1">
-                                <span>🔑</span> Mã Phòng Ghép Đôi:
+                                <span id="pairLockIcon">🔑</span> <span id="pairCodeLabel">Mã Phòng Ghép Đôi:</span>
                             </label>
-                            <button onclick="generateRandomPairCode()" class="text-[10px] text-hotRose font-bold hover:underline flex items-center gap-1 spring-btn">
+                            <button id="btnGenPairCode" onclick="generateRandomPairCode()" class="text-[10px] text-hotRose font-bold hover:underline flex items-center gap-0.5">
                                 <span>🎲</span> Tạo mã mới
                             </button>
                         </div>
                         <div class="flex gap-2">
-                            <input type="text" id="inputPairCode" value="LOVE-2024" placeholder="Ví dụ: LOVE-2024 hoặc LOVE-1661" class="flex-1 px-3 py-2 bg-slate-50 rounded-xl border border-rose-200 text-xs font-mono font-black text-hotRose tracking-wider uppercase focus:outline-none focus:border-hotRose text-center">
-                            <button onclick="copyPairCode()" class="px-3 py-2 bg-rose-50 hover:bg-rose-100 text-hotRose font-bold rounded-xl text-[11px] border border-rose-200 spring-btn shrink-0">
+                            <input type="text" id="inputPairCode" value="" placeholder="Ví dụ: LOVE-2024..." class="w-full px-3 py-2 bg-white rounded-xl border border-rose-200 text-xs font-bold text-slate-700 focus:outline-none focus:border-hotRose uppercase">
+                            <button onclick="copyPairCode()" class="px-3 py-2 bg-rose-50 hover:bg-rose-100 text-hotRose font-bold rounded-xl text-xs shrink-0 spring-btn">
                                 Sao chép
                             </button>
                         </div>
-                        <p class="text-[9.5px] text-slate-400 text-center">Gửi mã này cho người yêu cùng nhập vào máy nhé!</p>
+                        <p id="pairCodeSubText" class="text-[9.5px] text-slate-400 text-center">Gửi mã này cho người yêu cùng nhập để kết nối 2 máy</p>
                     </div>
 
                     <!-- BƯỚC 2: CHỌN VAI TRÒ TRÊN MÁY NÀY -->
@@ -1998,8 +1984,8 @@
                         </div>
                     </div>
 
-                    <!-- TRẠNG THÁI MÁY CHỦ REALTIME ĐÃ ĐƯỢC ẨN CHI TIẾT KỸ THUẬT -->
-                    <input type="hidden" id="inputFbDbUrl" value="https://thuannguyen-335ee-default-rtdb.asia-southeast1.firebasedatabase.app">
+                    <!-- TRẠNG THÁI MÁY CHỦ REALTIME -->
+                    <input type="hidden" id="inputFbDbUrl" value="https://thuannguyen-335ee-default-rtdb.asia-southeast1.firebasedatabase.app/">
                     <div class="p-2.5 rounded-xl bg-emerald-50/90 border border-emerald-200/80 flex items-center justify-between">
                         <div class="flex items-center gap-2">
                             <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></span>
@@ -2008,9 +1994,12 @@
                         <span class="text-[9.5px] font-medium text-emerald-600">Độ trễ siêu tốc ~0.1s</span>
                     </div>
 
-                    <button onclick="saveAndConnectFirebase()" class="w-full py-3 bg-gradient-to-r from-hotRose via-pink-500 to-rose-400 text-white font-extrabold text-xs rounded-xl shadow-md shadow-hotRose/30 spring-btn">
-                        🚀 Kết Nối & Bắt Đầu Đồng Bộ 2 Máy
-                    </button>
+                    <!-- NÚT THAO TÁC THEO TRẠNG THÁI PHÒNG -->
+                    <div id="pairActionButtonsContainer">
+                        <button onclick="saveAndConnectFirebase()" class="w-full py-3 bg-gradient-to-r from-hotRose to-rose-400 text-white font-extrabold rounded-xl text-xs shadow-md spring-btn">
+                            🚀 Kết Nối & Bắt Đầu Đồng Bộ 2 Máy
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -2287,36 +2276,155 @@
         lucide.createIcons();
 
         // ==================== 0. FIREBASE REALTIME SYNCHRONIZATION ENGINE ====================
-        let currentPairCode = localStorage.getItem('LOVE_PAIR_CODE') || 'LOVE-2024';
-        let myRole = localStorage.getItem('LOVE_MY_ROLE') || 'Anh'; // 'Anh' hoặc 'Em'
-        let firebaseDb = null;
+        // ==================== CƠ CHẾ KẾT NỐI REALTIME FIREBASE (KHÓA PHÒNG & RỜI PHÒNG) ====================
+        let currentPairCode = localStorage.getItem('LOVE_PAIR_CODE') || '';
+        let myRole = localStorage.getItem('LOVE_MY_ROLE') || 'Anh';
         let currentPairRef = null;
         let isSyncingRemote = false;
         let lastReceivedHeartTime = 0;
 
-        const FIXED_FIREBASE_DB_URL = "https://thuannguyen-335ee-default-rtdb.asia-southeast1.firebasedatabase.app";
+        function getCleanStarterFarm() {
+            return {
+                level: 1,
+                exp: 0,
+                maxExp: 100,
+                coins: 50,
+                water: 5,
+                maxWater: 5,
+                storageCapacity: 50,
+                inventory: {},
+                plots: [
+                    { id: 0, crop: null, plantedAt: 0, duration: 0, watered: false, plantedBy: null, locked: false },
+                    { id: 1, crop: null, plantedAt: 0, duration: 0, watered: false, plantedBy: null, locked: false },
+                    { id: 2, crop: null, plantedAt: 0, duration: 0, watered: false, plantedBy: null, locked: false },
+                    { id: 3, crop: null, plantedAt: 0, duration: 0, watered: false, plantedBy: null, locked: true, unlockLevel: 2 },
+                    { id: 4, crop: null, plantedAt: 0, duration: 0, watered: false, plantedBy: null, locked: true, unlockLevel: 3 },
+                    { id: 5, crop: null, plantedAt: 0, duration: 0, watered: false, plantedBy: null, locked: true, unlockLevel: 4 }
+                ],
+                animals: {
+                    chicken: { fedAt: 0, duration: 1200000, isFed: false, ready: false },
+                    sheep: { fedAt: 0, duration: 2400000, isFed: false, ready: false },
+                    cow: { fedAt: 0, duration: 3600000, isFed: false, ready: false }
+                },
+                quests: [
+                    { id: 'water_2', text: 'Tưới nước cho 2 luống cây', current: 0, target: 2, rewardCoins: 30, rewardExp: 20, claimed: false },
+                    { id: 'harvest_3', text: 'Thu hoạch 3 nông sản chín', current: 0, target: 3, rewardCoins: 50, rewardExp: 35, claimed: false },
+                    { id: 'feed_pet', text: 'Cho thú cưng ăn cỏ', current: 0, target: 1, rewardCoins: 25, rewardExp: 20, claimed: false },
+                    { id: 'use_coupon', text: 'Đổi hoặc sử dụng 1 Vé Hẹn Hò', current: 0, target: 1, rewardCoins: 80, rewardExp: 50, claimed: false }
+                ],
+                wallet: [],
+                logs: [
+                    { time: 'Hôm nay', text: 'Chào mừng hai đứa đến với Nông Trại Đôi Ta! 🌾' }
+                ]
+            };
+        }
 
         function getFirebaseDb() {
-            if (firebaseDb) return firebaseDb;
             try {
-                if (window.firebase) {
-                    if (!firebase.apps.length) {
-                        firebase.initializeApp({
-                            databaseURL: FIXED_FIREBASE_DB_URL,
-                            projectId: "thuannguyen-335ee"
-                        });
-                    }
-                    firebaseDb = firebase.database();
+                if (window.firebase && firebase.apps && firebase.apps.length > 0) {
+                    return firebase.database();
                 }
-            } catch(e) {
-                console.error("Firebase Init Error:", e);
+                const fbConfig = {
+                    databaseURL: "https://thuannguyen-335ee-default-rtdb.asia-southeast1.firebasedatabase.app/"
+                };
+                if (!window.firebase) {
+                    console.warn("Firebase SDK chưa sẵn sàng!");
+                    return null;
+                }
+                firebase.initializeApp(fbConfig);
+                return firebase.database();
+            } catch (err) {
+                console.warn("Firebase Init notice:", err);
+                return (window.firebase && firebase.apps && firebase.apps.length > 0) ? firebase.database() : null;
             }
-            return firebaseDb;
+        }
+
+        function updatePairingModalUI() {
+            const isConnected = !!(currentPairCode && currentPairRef);
+            const statusContainer = document.getElementById('pairStatusContainer');
+            const inputPair = document.getElementById('inputPairCode');
+            const btnGen = document.getElementById('btnGenPairCode');
+            const lockIcon = document.getElementById('pairLockIcon');
+            const actionContainer = document.getElementById('pairActionButtonsContainer');
+            const subText = document.getElementById('pairCodeSubText');
+
+            if (isConnected) {
+                if (statusContainer) {
+                    statusContainer.innerHTML = `
+                        <div class="p-3 rounded-2xl bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-200 text-emerald-900 space-y-1 shadow-2xs">
+                            <div class="flex items-center justify-between">
+                                <span class="text-[11px] font-black flex items-center gap-1.5 text-emerald-800">
+                                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                                    ĐÃ KẾT NỐI & KHÓA PHÒNG 🔒
+                                </span>
+                                <span class="text-[10px] font-black bg-emerald-200/80 text-emerald-900 px-2 py-0.5 rounded-full">${currentPairCode}</span>
+                            </div>
+                            <p class="text-[10px] text-emerald-700 leading-snug">Hai bạn đang ghép đôi trong phòng này. Phòng đã được khóa an toàn để tránh ghi đè dữ liệu.</p>
+                        </div>
+                    `;
+                }
+                if (inputPair) {
+                    inputPair.value = currentPairCode;
+                    inputPair.readOnly = true;
+                    inputPair.classList.add('bg-slate-100', 'cursor-not-allowed', 'text-slate-500');
+                }
+                if (btnGen) btnGen.classList.add('hidden');
+                if (lockIcon) lockIcon.innerText = '🔒';
+                if (subText) subText.innerText = 'Mã phòng đang hoạt động. Nhấn "Sao chép" để gửi cho người ấy.';
+
+                if (actionContainer) {
+                    actionContainer.innerHTML = `
+                        <div class="space-y-2 pt-1">
+                            <div class="w-full py-2.5 bg-emerald-50 border border-emerald-200 text-emerald-700 font-bold rounded-xl text-xs flex items-center justify-center gap-1.5 select-none">
+                                <i data-lucide="shield-check" class="w-4 h-4 text-emerald-600"></i>
+                                <span>Phòng Đang Hoạt Động & Đồng Bộ Realtime 🟢</span>
+                            </div>
+                            <button onclick="leaveCurrentPairRoom()" class="w-full py-2.5 bg-white hover:bg-rose-50 text-rose-600 border border-rose-300 font-extrabold rounded-xl text-xs spring-btn flex items-center justify-center gap-1.5 shadow-2xs">
+                                <i data-lucide="log-out" class="w-4 h-4 text-rose-500"></i>
+                                <span>Rời Phòng Ghép Đôi 🚪 (Để Nhập Mã Mới)</span>
+                            </button>
+                        </div>
+                    `;
+                }
+            } else {
+                if (statusContainer) {
+                    statusContainer.innerHTML = `
+                        <div class="p-3 rounded-2xl bg-amber-50 border border-amber-200 text-amber-900 space-y-1 shadow-2xs">
+                            <div class="flex items-center justify-between">
+                                <span class="text-[11px] font-black flex items-center gap-1.5 text-amber-800">
+                                    <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
+                                    CHƯA KẾT NỐI PHÒNG 🔴
+                                </span>
+                                <span class="text-[10px] font-bold bg-amber-200/80 text-amber-900 px-2 py-0.5 rounded-full">Sẵn sàng ghép đôi</span>
+                            </div>
+                            <p class="text-[10px] text-amber-700 leading-snug">Nhập mã phòng có sẵn của người yêu hoặc bấm "Tạo mã mới" để bắt đầu ghép đôi nhé!</p>
+                        </div>
+                    `;
+                }
+                if (inputPair) {
+                    inputPair.readOnly = false;
+                    inputPair.classList.remove('bg-slate-100', 'cursor-not-allowed', 'text-slate-500');
+                    if (!inputPair.value) inputPair.value = '';
+                    inputPair.placeholder = "Nhập mã (VD: LOVE-1234)...";
+                }
+                if (btnGen) btnGen.classList.remove('hidden');
+                if (lockIcon) lockIcon.innerText = '🔑';
+                if (subText) subText.innerText = 'Gửi mã này cho người yêu cùng nhập để kết nối 2 máy.';
+
+                if (actionContainer) {
+                    actionContainer.innerHTML = `
+                        <button onclick="saveAndConnectFirebase()" class="w-full py-3 bg-gradient-to-r from-hotRose to-rose-400 text-white font-extrabold rounded-xl text-xs shadow-md spring-btn flex items-center justify-center gap-1.5">
+                            <i data-lucide="radio" class="w-4 h-4"></i>
+                            <span>🚀 Kết Nối & Bắt Đầu Đồng Bộ 2 Máy</span>
+                        </button>
+                    `;
+                }
+            }
+            if (window.lucide && lucide.createIcons) lucide.createIcons();
         }
 
         function openFirebaseModal() {
-            const input = document.getElementById('inputPairCode');
-            if (input) input.value = currentPairCode;
+            updatePairingModalUI();
             selectMyRole(myRole);
             document.getElementById('firebaseModal').classList.add('active');
         }
@@ -2341,6 +2449,7 @@
         }
 
         function generateRandomPairCode() {
+            if (currentPairCode && currentPairRef) return; // Đang khóa
             const code = 'LOVE-' + Math.floor(1000 + Math.random() * 9000);
             const input = document.getElementById('inputPairCode');
             if (input) input.value = code;
@@ -2348,13 +2457,21 @@
 
         function copyPairCode() {
             const code = (document.getElementById('inputPairCode')?.value.trim().toUpperCase()) || currentPairCode;
+            if (!code) {
+                showCuteToast("Chưa có mã phòng để sao chép!", "⚠️");
+                return;
+            }
             navigator.clipboard.writeText(code).then(() => {
                 showCuteToast(`Đã sao chép mã phòng: ${code}`, "📋");
             });
         }
 
         function saveAndConnectFirebase() {
-            const codeInput = (document.getElementById('inputPairCode')?.value.trim().toUpperCase()) || 'LOVE-2024';
+            const codeInput = (document.getElementById('inputPairCode')?.value.trim().toUpperCase());
+            if (!codeInput) {
+                showCuteToast("Vui lòng nhập mã phòng ghép đôi!", "⚠️");
+                return;
+            }
             currentPairCode = codeInput;
             localStorage.setItem('LOVE_PAIR_CODE', currentPairCode);
             localStorage.setItem('LOVE_MY_ROLE', myRole);
@@ -2362,8 +2479,67 @@
             connectToPairRoom(currentPairCode, true);
         }
 
+        function leaveCurrentPairRoom() {
+            if (!confirm(`Bạn có chắc muốn rời phòng "${currentPairCode}"? Dữ liệu trên máy bạn sẽ được làm sạch để sẵn sàng vào phòng mới.`)) {
+                return;
+            }
+
+            // 1. Ngắt kết nối Firebase
+            if (currentPairRef) {
+                try { currentPairRef.off(); } catch(e) {}
+                currentPairRef = null;
+            }
+
+            // 2. Xóa mã phòng
+            localStorage.removeItem('LOVE_PAIR_CODE');
+            currentPairCode = '';
+
+            // 3. Reset các dữ liệu tạm thời về trạng thái trắng tinh
+            currentWater = 0;
+            updateWaterDisplay();
+
+            loveStartDate = new Date().toISOString().split('T')[0];
+            localStorage.removeItem('LOVE_START_DATE');
+            updateLoveDaysCounter();
+
+            userNames = { boy: "Anh", girl: "Em" };
+            localStorage.removeItem('LOVE_NAME_BOY');
+            localStorage.removeItem('LOVE_NAME_GIRL');
+
+            userAvatars = {
+                boy: "https://api.dicebear.com/7.x/adventurer/svg?seed=Felix&hair=short04",
+                girl: "https://api.dicebear.com/7.x/adventurer/svg?seed=Bella&hair=long01"
+            };
+            localStorage.removeItem('LOVE_AVATAR_BOY');
+            localStorage.removeItem('LOVE_AVATAR_GIRL');
+            renderAvatarsUI();
+
+            // Reset Nông trại về cấp 1 trắng tinh
+            farmData = getCleanStarterFarm();
+            localStorage.setItem('LOVE_FARM_DATA_V2', JSON.stringify(farmData));
+            renderFarmUI();
+
+            // Reset Cây tình yêu về cấp 1 hạt mầm trắng tinh
+            loveTreeData = { level: 1, exp: 0, maxExp: 100 };
+            localStorage.setItem('LOVE_TREE_DATA', JSON.stringify(loveTreeData));
+            renderLoveTreeUI();
+
+            // 4. Cập nhật header trạng thái
+            const textEl = document.getElementById('fbStatusText');
+            const badgeEl = document.getElementById('fbRoleBadge');
+            const dotEl = document.getElementById('fbStatusDot');
+            if (textEl) textEl.innerText = 'Realtime: Chưa kết nối phòng (Chạm để ghép đôi 🔴)';
+            if (badgeEl) badgeEl.innerText = 'Chưa ghép';
+            if (dotEl) dotEl.className = 'w-2 h-2 rounded-full bg-slate-300 shrink-0';
+
+            // 5. Cập nhật giao diện modal sang trạng thái Mở Khóa
+            updatePairingModalUI();
+            showCuteToast("Đã rời phòng thành công! Bạn có thể nhập mã mới để kết nối.", "🚪");
+        }
+
         function connectToPairRoom(pairCode, showToast = false) {
-            currentPairCode = (pairCode || 'LOVE-2024').trim().toUpperCase();
+            currentPairCode = (pairCode || '').trim().toUpperCase();
+            if (!currentPairCode) return;
             localStorage.setItem('LOVE_PAIR_CODE', currentPairCode);
             localStorage.setItem('LOVE_MY_ROLE', myRole);
 
@@ -2400,19 +2576,23 @@
                         pairCode: currentPairCode,
                         status: "connected",
                         createdAt: Date.now(),
-                        startDate: loveStartDate || new Date().toISOString().split('T')[0],
-                        userNames: userNames || { boy: "Anh", girl: "Em" },
-                        userAvatars: userAvatars || {
+                        startDate: new Date().toISOString().split('T')[0],
+                        loveStartDate: new Date().toISOString().split('T')[0],
+                        userNames: { boy: "Anh", girl: "Em" },
+                        userAvatars: {
                             boy: "https://api.dicebear.com/7.x/adventurer/svg?seed=Felix&hair=short04",
                             girl: "https://api.dicebear.com/7.x/adventurer/svg?seed=Bella&hair=long01"
                         },
-                        water: { anh: currentWater || 0, em: 0 },
-                        farm: farmData,
+                        water: { anh: 0, em: 0 },
+                        tree: { level: 1, exp: 0, maxExp: 100 },
+                        farm: getCleanStarterFarm(),
                         reminders: remindersData
                     };
                     currentPairRef.set(newRoomData).catch(e => console.warn("Init room note:", e));
                 }
             });
+
+            updatePairingModalUI();
 
             if (showToast) {
                 showCuteToast(`Đã kết nối phòng "${currentPairCode}" thành công!`, "💚");
@@ -2482,12 +2662,18 @@
                     handleRemoteFarmData(data.farm);
                 }
 
-                // 7. Đồng bộ ghi chú dán tường
-                // 8. Đồng bộ 100 điều cùng làm
+                // 7. Đồng bộ 100 điều cùng làm
                 if (data.bucketList && Array.isArray(data.bucketList)) {
                     bucketItems = data.bucketList;
                     localStorage.setItem("LOVE_BUCKET_DATA", JSON.stringify(bucketItems));
                     renderBucketList();
+                }
+
+                // 8. Đồng bộ Cây Tình Yêu Realtime
+                if (data.tree && typeof data.tree.level === 'number') {
+                    loveTreeData = data.tree;
+                    localStorage.setItem('LOVE_TREE_DATA', JSON.stringify(loveTreeData));
+                    renderLoveTreeUI();
                 }
 
                 // 9. Đồng bộ lịch làm việc / thời khóa biểu
@@ -2527,12 +2713,13 @@
                 setTimeout(() => { isSyncingRemote = false; }, 200);
             }
         }
-
         
         function sendHeartFlutter() {
             triggerLoveBurst();
             if (navigator.vibrate) navigator.vibrate([50, 40, 80]);
             showCuteToast("Đã bắn triệu quả tim tới người ấy! 💕", "💖");
+
+            addLoveTreeExp(5);
 
             syncFieldToFirebase('heartFlutter', {
                 sender: myRole,
@@ -2550,22 +2737,20 @@
             }
         }
 
-        // Tự động kết nối Realtime khi tải trang
+        // Tự động kết nối Realtime khi tải trang nếu đã từng lưu mã phòng
         setTimeout(() => {
-            connectToPairRoom(currentPairCode, false);
+            if (currentPairCode) {
+                connectToPairRoom(currentPairCode, false);
+            } else {
+                const textEl = document.getElementById('fbStatusText');
+                const badgeEl = document.getElementById('fbRoleBadge');
+                const dotEl = document.getElementById('fbStatusDot');
+                if (textEl) textEl.innerText = 'Realtime: Chưa kết nối phòng (Chạm để ghép đôi 🔴)';
+                if (badgeEl) badgeEl.innerText = 'Chưa ghép';
+                if (dotEl) dotEl.className = 'w-2 h-2 rounded-full bg-rose-400 shrink-0 animate-pulse';
+                updatePairingModalUI();
+            }
         }, 300);
-
-        // TOAST
-        let toastTimer = null;
-        function showCuteToast(msg, icon = "✨") {
-            const toast = document.getElementById('cuteToast');
-            document.getElementById('toastIcon').innerText = icon;
-            document.getElementById('toastMsg').innerText = msg;
-            toast.classList.add('show');
-            if (toastTimer) clearTimeout(toastTimer);
-            toastTimer = setTimeout(() => toast.classList.remove('show'), 2500);
-            if (navigator.vibrate) navigator.vibrate(25);
-        }
 
         // ==================== 1. TẢI DỮ LIỆU TỰ ĐỘNG TỪ GOOGLE TRANG TÍNH (REALTIME GVIZ JSONP) ====================
         const SHEET_ID = '1_ACfFyJqQZiRTHoX9s6fQaHiljMQs4E2Kf7pcNkWCHM';
@@ -3295,6 +3480,7 @@ CÁC NGUYÊN TẮC VÀNG ĐỂ TRÒ CHUYỆN THẬT TỰ NHIÊN (RẤT QUAN TR�
         function drinkWater() {
             if (currentWater < 8) {
                 currentWater++;
+                if (typeof addLoveTreeExp === "function") addLoveTreeExp(10);
                 updateWaterDisplay();
                 showCuteToast(`Đã uống thêm 1 ly! (${currentWater}/8)`, "💧");
                 triggerLoveBurst();
@@ -3960,7 +4146,7 @@ CÁC NGUYÊN TẮC VÀNG ĐỂ TRÒ CHUYỆN THẬT TỰ NHIÊN (RẤT QUAN TR�
             if (!banner) return;
 
             if (msgEl) msgEl.innerText = body;
-            banner.classList.remove('-translate-y-36', 'opacity-0', 'pointer-events-none');
+            banner.classList.remove('-translate-y-56', 'opacity-0', 'pointer-events-none');
             banner.classList.add('translate-y-0', 'opacity-100', 'pointer-events-auto');
             if (navigator.vibrate) navigator.vibrate([40, 30, 40]);
 
@@ -3974,7 +4160,7 @@ CÁC NGUYÊN TẮC VÀNG ĐỂ TRÒ CHUYỆN THẬT TỰ NHIÊN (RẤT QUAN TR�
             const banner = document.getElementById('dynamicIslandNotif');
             if (banner) {
                 banner.classList.remove('translate-y-0', 'opacity-100', 'pointer-events-auto');
-                banner.classList.add('-translate-y-36', 'opacity-0', 'pointer-events-none');
+                banner.classList.add('-translate-y-56', 'opacity-0', 'pointer-events-none');
             }
         }
 
@@ -6181,6 +6367,198 @@ CÁC NGUYÊN TẮC VÀNG ĐỂ TRÒ CHUYỆN THẬT TỰ NHIÊN (RẤT QUAN TR�
                 }
             }
         }
+
+
+        // ==================== HỆ THỐNG CÂY TÌNH YÊU REALTIME (CẤP 1 ĐẾN CẤP 5) ====================
+        let loveTreeData = JSON.parse(localStorage.getItem('LOVE_TREE_DATA') || 'null') || {
+            level: 1,
+            exp: 0,
+            maxExp: 100,
+            totalWatered: 0
+        };
+
+        const LOVE_TREE_STAGES = {
+            1: {
+                title: "Cây Tình Yêu (Cấp 1 - Hạt Mầm) 🌱",
+                desc: "Cây vừa được gieo mầm tình yêu! Hai bạn hãy uống nước và bắn tim mỗi ngày để mầm nhỏ vươn chồi nhé! ✨",
+                maxExp: 100,
+                svg: `
+                    <svg viewBox="0 0 200 200" class="w-full h-full tree-sway">
+                        <ellipse cx="100" cy="180" rx="42" ry="10" fill="#E2E8F0"/>
+                        <path d="M 70 140 L 130 140 L 122 178 L 78 178 Z" fill="#FFE5EC" stroke="#FFAAA6" stroke-width="2.5"/>
+                        <ellipse cx="100" cy="140" rx="30" ry="6" fill="#FFCCD5"/>
+                        <ellipse cx="100" cy="140" rx="25" ry="4.5" fill="#8B5A2B"/>
+                        <path d="M 100 140 Q 100 115 100 105" fill="none" stroke="#10B981" stroke-width="5" stroke-linecap="round"/>
+                        <path d="M 100 115 Q 82 108 80 95 Q 95 92 100 112" fill="#34D399" stroke="#059669" stroke-width="1.5"/>
+                        <path d="M 100 115 Q 118 108 120 95 Q 105 92 100 112" fill="#34D399" stroke="#059669" stroke-width="1.5"/>
+                        <path d="M 97 86 A 3.5 3.5 0 0 1 100 82 A 3.5 3.5 0 0 1 103 86 Q 100 93 100 93 Q 97 93 97 86 Z" fill="#FF4D6D"/>
+                        <circle cx="100" cy="80" r="2.5" fill="#FEF08A" class="animate-ping"/>
+                    </svg>
+                    <span class="absolute top-6 right-6 text-xs animate-ping">✨</span>
+                    <span class="absolute top-10 left-6 text-xs animate-pulse">🌱</span>
+                `
+            },
+            2: {
+                title: "Cây Tình Yêu (Cấp 2 - Đâm Chồi) 🌿",
+                desc: "Mầm non đã lớn thành cây con xanh mướt! Hãy tiếp tục chăm sóc để những nụ hoa tình yêu chớm nở nha! 🌸",
+                maxExp: 250,
+                svg: `
+                    <svg viewBox="0 0 200 200" class="w-full h-full tree-sway">
+                        <ellipse cx="100" cy="180" rx="42" ry="10" fill="#E2E8F0"/>
+                        <path d="M 68 135 L 132 135 L 122 178 L 78 178 Z" fill="#FFCCD5" stroke="#FFAAA6" stroke-width="2.5"/>
+                        <ellipse cx="100" cy="135" rx="32" ry="7" fill="#FFB3C6"/>
+                        <path d="M 95 155 A 4 4 0 0 1 100 151 A 4 4 0 0 1 105 155 Q 100 163 100 163 Q 95 163 95 155 Z" fill="#FF4D6D"/>
+                        <path d="M 100 135 Q 94 110 98 85" fill="none" stroke="#8B5CF6" stroke-width="5" stroke-linecap="round"/>
+                        <path d="M 98 112 Q 80 102 75 92" fill="none" stroke="#A78BFA" stroke-width="3.5" stroke-linecap="round"/>
+                        <path d="M 99 102 Q 120 94 125 84" fill="none" stroke="#A78BFA" stroke-width="3.5" stroke-linecap="round"/>
+                        <circle cx="98" cy="78" r="18" fill="#A7F3D0" opacity="0.9"/>
+                        <circle cx="74" cy="88" r="14" fill="#6EE7B7" opacity="0.9"/>
+                        <circle cx="125" cy="80" r="14" fill="#BAE6FD" opacity="0.9"/>
+                        <circle cx="98" cy="74" r="5" fill="#FF4D6D"/>
+                        <circle cx="125" cy="78" r="4.5" fill="#FF758F"/>
+                    </svg>
+                    <span class="absolute top-4 right-5 text-xs animate-ping">✨</span>
+                    <span class="absolute top-9 left-5 text-xs animate-pulse">🌿</span>
+                `
+            },
+            3: {
+                title: "Cây Tình Yêu (Cấp 3 - Nở Hoa Rực Rỡ) 🌸",
+                desc: "Cây đã bung nở những bông hoa trái tim tuyệt đẹp! Tình yêu của hai bạn đang tràn ngập hương sắc ngọt ngào! 💕",
+                maxExp: 500,
+                svg: `
+                    <svg viewBox="0 0 200 200" class="w-full h-full tree-sway">
+                        <ellipse cx="100" cy="180" rx="42" ry="10" fill="#E2E8F0"/>
+                        <path d="M 68 135 L 132 135 L 122 178 L 78 178 Z" fill="#FFCCD5" stroke="#FFAAA6" stroke-width="2.5"/>
+                        <ellipse cx="100" cy="135" rx="32" ry="7" fill="#FFB3C6"/>
+                        <path d="M 95 155 A 4 4 0 0 1 100 151 A 4 4 0 0 1 105 155 Q 100 163 100 163 Q 95 163 95 155 Z" fill="#FF4D6D"/>
+                        <path d="M 100 135 Q 92 105 102 75 Q 106 65 100 50" fill="none" stroke="#A78BFA" stroke-width="6" stroke-linecap="round"/>
+                        <path d="M 98 100 Q 120 90 128 78" fill="none" stroke="#C4B5FD" stroke-width="4.5" stroke-linecap="round"/>
+                        <path d="M 98 88 Q 78 80 72 70" fill="none" stroke="#C4B5FD" stroke-width="4.5" stroke-linecap="round"/>
+                        <circle cx="100" cy="45" r="22" fill="#FBCFE8" opacity="0.9"/>
+                        <circle cx="128" cy="74" r="17" fill="#DDD6FE" opacity="0.9"/>
+                        <circle cx="70" cy="68" r="16" fill="#FCE7F3" opacity="0.9"/>
+                        <g class="flower-glow">
+                            <circle cx="100" cy="42" r="9" fill="#FF4D6D"/>
+                            <circle cx="94" cy="38" r="6" fill="#FF758F"/>
+                            <circle cx="106" cy="38" r="6" fill="#FF758F"/>
+                            <circle cx="95" cy="47" r="6" fill="#FF758F"/>
+                            <circle cx="105" cy="47" r="6" fill="#FF758F"/>
+                            <circle cx="100" cy="42" r="4" fill="#FEF08A"/>
+                        </g>
+                        <g class="flower-glow" style="animation-delay: 1s;">
+                            <circle cx="128" cy="72" r="7" fill="#FF4D6D"/>
+                            <circle cx="128" cy="72" r="3" fill="#FEF08A"/>
+                        </g>
+                    </svg>
+                    <span class="absolute top-2 right-4 text-xs animate-ping">✨</span>
+                    <span class="absolute top-8 left-4 text-xs animate-pulse">🌸</span>
+                `
+            },
+            4: {
+                title: "Đại Thụ Tình Yêu (Cấp 4 - Kết Trái Ngọt) 🍎",
+                desc: "Cây đã trĩu nặng những trái tim tình yêu ngọt ngào! Minh chứng cho sự thấu hiểu và gắn bó bền chặt! 💖",
+                maxExp: 1000,
+                svg: `
+                    <svg viewBox="0 0 200 200" class="w-full h-full tree-sway">
+                        <ellipse cx="100" cy="180" rx="46" ry="11" fill="#E2E8F0"/>
+                        <path d="M 65 132 L 135 132 L 124 178 L 76 178 Z" fill="#FFCCD5" stroke="#FFAAA6" stroke-width="2.5"/>
+                        <ellipse cx="100" cy="132" rx="35" ry="7.5" fill="#FFB3C6"/>
+                        <path d="M 100 132 Q 90 98 102 65 Q 106 50 100 38" fill="none" stroke="#7C3AED" stroke-width="7" stroke-linecap="round"/>
+                        <path d="M 98 95 Q 125 82 135 68" fill="none" stroke="#8B5CF6" stroke-width="5" stroke-linecap="round"/>
+                        <path d="M 96 82 Q 72 72 65 60" fill="none" stroke="#8B5CF6" stroke-width="5" stroke-linecap="round"/>
+                        <circle cx="100" cy="38" r="26" fill="#F472B6" opacity="0.95"/>
+                        <circle cx="135" cy="65" r="20" fill="#C084FC" opacity="0.95"/>
+                        <circle cx="65" cy="58" r="19" fill="#FB7185" opacity="0.95"/>
+                        <!-- Trái táo trái tim -->
+                        <path d="M 96 36 A 5 5 0 0 1 100 32 A 5 5 0 0 1 104 36 Q 100 46 100 46 Q 96 46 96 36 Z" fill="#EF4444"/>
+                        <path d="M 131 63 A 4 4 0 0 1 135 60 A 4 4 0 0 1 139 63 Q 135 71 135 71 Q 131 71 131 63 Z" fill="#EF4444"/>
+                        <path d="M 61 56 A 4 4 0 0 1 65 53 A 4 4 0 0 1 69 56 Q 65 64 65 64 Q 61 64 61 56 Z" fill="#EF4444"/>
+                    </svg>
+                    <span class="absolute top-2 right-4 text-xs animate-ping">🍎</span>
+                    <span class="absolute top-6 left-4 text-xs animate-pulse">💖</span>
+                `
+            },
+            5: {
+                title: "Cây Vĩnh Cửu (Cấp 5 - Lung Linh Tỏa Sáng) 👑💖",
+                desc: "Đỉnh cao tình yêu vĩnh hằng! Cây tình yêu của hai bạn đã hóa thành biểu tượng lung linh bất diệt! ✨",
+                maxExp: 2000,
+                svg: `
+                    <svg viewBox="0 0 200 200" class="w-full h-full tree-sway">
+                        <ellipse cx="100" cy="180" rx="48" ry="12" fill="#E2E8F0"/>
+                        <path d="M 64 130 L 136 130 L 125 178 L 75 178 Z" fill="#FFD1DC" stroke="#FF85A1" stroke-width="2.5"/>
+                        <ellipse cx="100" cy="130" rx="36" ry="8" fill="#FFAAA6"/>
+                        <path d="M 100 130 Q 88 95 102 60 Q 106 45 100 32" fill="none" stroke="#FF4D6D" stroke-width="8" stroke-linecap="round"/>
+                        <circle cx="100" cy="35" r="30" fill="url(#rainbowGlow)" opacity="0.95"/>
+                        <circle cx="140" cy="62" r="22" fill="#F472B6" opacity="0.95"/>
+                        <circle cx="60" cy="55" r="22" fill="#C084FC" opacity="0.95"/>
+                        <!-- Trái tim vương miện tỏa sáng -->
+                        <path d="M 94 34 A 7 7 0 0 1 100 28 A 7 7 0 0 1 106 34 Q 100 48 100 48 Q 94 48 94 34 Z" fill="#FF0055" class="animate-pulse"/>
+                        <circle cx="100" cy="24" r="4" fill="#FBBF24" class="animate-ping"/>
+                    </svg>
+                    <span class="absolute top-1 right-3 text-xs animate-ping">✨</span>
+                    <span class="absolute top-5 left-3 text-xs animate-pulse">👑</span>
+                `
+            }
+        };
+
+        function renderLoveTreeUI() {
+            if (!loveTreeData.level || loveTreeData.level < 1) loveTreeData.level = 1;
+            const stage = LOVE_TREE_STAGES[loveTreeData.level] || LOVE_TREE_STAGES[1];
+            loveTreeData.maxExp = stage.maxExp;
+
+            const titleEl = document.getElementById('loveTreeTitle');
+            const expBadgeEl = document.getElementById('loveTreeExpBadge');
+            const descEl = document.getElementById('loveTreeDesc');
+            const barEl = document.getElementById('loveTreeProgressBar');
+            const svgBox = document.getElementById('loveTreeSvgContainer');
+
+            if (titleEl) titleEl.innerText = stage.title;
+            if (descEl) descEl.innerText = stage.desc;
+
+            const pct = Math.min(100, Math.max(0, Math.round((loveTreeData.exp / loveTreeData.maxExp) * 100)));
+            if (expBadgeEl) expBadgeEl.innerText = `${loveTreeData.exp}/${loveTreeData.maxExp} EXP 💖`;
+            if (barEl) barEl.style.width = `${pct}%`;
+
+            if (svgBox) {
+                svgBox.innerHTML = stage.svg;
+            }
+        }
+
+        function addLoveTreeExp(amount) {
+            loveTreeData.exp += amount;
+            let leveledUp = false;
+
+            while (loveTreeData.exp >= loveTreeData.maxExp && loveTreeData.level < 5) {
+                loveTreeData.exp -= loveTreeData.maxExp;
+                loveTreeData.level += 1;
+                const nextStage = LOVE_TREE_STAGES[loveTreeData.level];
+                if (nextStage) loveTreeData.maxExp = nextStage.maxExp;
+                leveledUp = true;
+            }
+
+            if (loveTreeData.level >= 5 && loveTreeData.exp > loveTreeData.maxExp) {
+                loveTreeData.exp = loveTreeData.maxExp;
+            }
+
+            localStorage.setItem('LOVE_TREE_DATA', JSON.stringify(loveTreeData));
+            syncFieldToFirebase('tree', loveTreeData);
+            renderLoveTreeUI();
+
+            if (leveledUp) {
+                triggerLoveBurst();
+                showCuteToast(`🎉 Chúc mừng! Cây Tình Yêu đã thăng cấp lên CẤP ${loveTreeData.level}!`, "🌸");
+            }
+        }
+
+        function waterLoveTree() {
+            addLoveTreeExp(15);
+            triggerLoveBurst();
+            if (navigator.vibrate) navigator.vibrate([40, 20, 60]);
+            showCuteToast("Đã tưới nước cho Cây Tình Yêu! Cây vừa lớn thêm (+15 EXP) 🌱💧", "💧");
+        }
+
+        // Tự động render cây khi khởi chạy
+        renderLoveTreeUI();
 
 </script>
 </body>
