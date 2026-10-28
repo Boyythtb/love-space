@@ -3801,11 +3801,16 @@ CÁC NGUYÊN TẮC VÀNG ĐỂ TRÒ CHUYỆN THẬT TỰ NHIÊN (RẤT QUAN TR�
         }
 
         // Hàm phát thông báo Native chuẩn PWA (chạy mượt ngoài Lock Screen & Thanh thông báo điện thoại)
-        async function dispatchPushNotification(title, body) {
-            // Hiện Dynamic Island Banner trong màn hình ứng dụng
-            showDynamicIslandBanner(title, body);
+        async function dispatchPushNotification(title, body, forceOS = false) {
+            const isAppVisible = document.visibilityState === 'visible' && !document.hidden;
 
-            // Bắn ra OS Lock Screen Notification nếu đã cấp quyền
+            // 1. Khi đang MỞ TRỰC TIẾP APP: Chỉ hiện Dynamic Island Banner trong app, không bắn thông báo máy để tránh bị 2 thông báo đè nhau
+            if (isAppVisible && !forceOS) {
+                showDynamicIslandBanner(title, body);
+                return;
+            }
+
+            // 2. Khi đã THOÁT APP, TẮT MÀN HÌNH (hoặc khi bấm Thử chuông máy): Bắn thông báo đẩy hệ điều hành của điện thoại
             if ("Notification" in window && Notification.permission === "granted") {
                 try {
                     if ('serviceWorker' in navigator) {
@@ -3816,7 +3821,7 @@ CÁC NGUYÊN TẮC VÀNG ĐỂ TRÒ CHUYỆN THẬT TỰ NHIÊN (RẤT QUAN TR�
                                 icon: "./images/mochi-192.png",
                                 badge: "./images/mochi-badge-72.png",
                                 vibrate: [150, 80, 150, 80, 250],
-                                tag: "love-space-notification",
+                                tag: "love-space-" + Date.now(),
                                 renotify: true,
                                 actions: [
                                     { action: "open", title: "Mở Love Space 💕" },
@@ -3834,6 +3839,8 @@ CÁC NGUYÊN TẮC VÀNG ĐỂ TRÒ CHUYỆN THẬT TỰ NHIÊN (RẤT QUAN TR�
                 } catch(e) {
                     console.warn("Lỗi gửi push notification:", e);
                 }
+            } else if (isAppVisible) {
+                showDynamicIslandBanner(title, body);
             }
         }
 
