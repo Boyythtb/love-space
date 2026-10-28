@@ -2678,8 +2678,9 @@
 
                 // 9. Đồng bộ lịch làm việc / thời khóa biểu
                 if (data.schedules && Array.isArray(data.schedules)) {
-                    schedules = data.schedules;
-                    renderSchedules();
+                    scheduleItems = data.schedules;
+                    localStorage.setItem('LOVE_SCHEDULE_DATA', JSON.stringify(scheduleItems));
+                    if (typeof renderScheduleList === 'function') renderScheduleList();
                 }
 
                 // 10. Đồng bộ chu kỳ con gái
@@ -2702,9 +2703,10 @@
                     const c3A = document.getElementById('combo3Addr'); if (c3A && win3) c3A.innerText = `${win3.address || 'Hà Nội'} ${win3.note ? '• ' + win3.note : ''}`;
                 }
 
-                if (data.stickyNotes && Array.isArray(data.stickyNotes)) {
-                    stickyNotes = data.stickyNotes;
-                    renderStickyNotes();
+                // 12. Đồng bộ mẩu giấy thủ thỉ
+                if (data.latestNote) {
+                    const el = document.getElementById('latestNoteContent');
+                    if (el) el.innerText = `"${data.latestNote}"`;
                 }
 
             } catch(e) {
@@ -2751,6 +2753,21 @@
                 updatePairingModalUI();
             }
         }, 300);
+
+        // ==================== HỆ THỐNG TOAST THÔNG BÁO DỄ THƯƠNG ====================
+        let toastTimer = null;
+        function showCuteToast(msg, icon = "✨") {
+            const toast = document.getElementById('cuteToast');
+            if (!toast) return;
+            const iconEl = document.getElementById('toastIcon');
+            const msgEl = document.getElementById('toastMsg');
+            if (iconEl) iconEl.innerText = icon;
+            if (msgEl) msgEl.innerText = msg;
+            toast.classList.add('show');
+            if (toastTimer) clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => toast.classList.remove('show'), 2500);
+            if (navigator.vibrate) navigator.vibrate(25);
+        }
 
         // ==================== 1. TẢI DỮ LIỆU TỰ ĐỘNG TỪ GOOGLE TRANG TÍNH (REALTIME GVIZ JSONP) ====================
         const SHEET_ID = '1_ACfFyJqQZiRTHoX9s6fQaHiljMQs4E2Kf7pcNkWCHM';
