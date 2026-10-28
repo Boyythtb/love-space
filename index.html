@@ -1931,6 +1931,7 @@
                     </button>
                 </div>
             </div>
+        </div>
         <!-- ===================== MODAL KẾT NỐI REALTIME (HỖ TRỢ KHÓA PHÒNG & RỜI PHÒNG) ===================== -->
         <div id="firebaseModal" class="modal-overlay" onclick="closeModalsOnBackdrop(event)">
             <div class="modal-sheet max-h-[85vh] overflow-y-auto no-scrollbar">
@@ -2273,7 +2274,7 @@
 
     <!-- SCRIPT CHÍNH VẬN HÀNH -->
     <script>
-        lucide.createIcons();
+        if (typeof lucide !== "undefined" && lucide && lucide.createIcons) lucide.createIcons();
 
         // ==================== 0. FIREBASE REALTIME SYNCHRONIZATION ENGINE ====================
         // ==================== CƠ CHẾ KẾT NỐI REALTIME FIREBASE (KHÓA PHÒNG & RỜI PHÒNG) ====================
@@ -2420,7 +2421,7 @@
                     `;
                 }
             }
-            if (window.lucide && lucide.createIcons) lucide.createIcons();
+            if (typeof lucide !== "undefined" && lucide && lucide.createIcons) lucide.createIcons();
         }
 
         function openFirebaseModal() {
@@ -4020,13 +4021,20 @@ CÁC NGUYÊN TẮC VÀNG ĐỂ TRÒ CHUYỆN THẬT TỰ NHIÊN (RẤT QUAN TR�
         function closeChatModal() { document.getElementById('chatModal').classList.remove('active'); }
         function closeModalsOnBackdrop(e) {
             if (e.target.classList.contains('modal-overlay')) {
-                closeChatModal();
-                closeAddScheduleModal();
-                closeAddBucketModal();
-                closeAttachPhotoModal();
-                closeApiKeyModal();
-                closeFirebaseModal();
-                closeNotifModal();
+                if (typeof closeChatModal === 'function') closeChatModal();
+                if (typeof closeAddScheduleModal === 'function') closeAddScheduleModal();
+                if (typeof closeAddBucketModal === 'function') closeAddBucketModal();
+                if (typeof closeAttachPhotoModal === 'function') closeAttachPhotoModal();
+                if (typeof closeApiKeyModal === 'function') closeApiKeyModal();
+                if (typeof closeFirebaseModal === 'function') closeFirebaseModal();
+                if (typeof closeNotifModal === 'function') closeNotifModal();
+                if (typeof closeAvatarModal === 'function') closeAvatarModal();
+                if (typeof closeLoveStartDateModal === 'function') closeLoveStartDateModal();
+                if (typeof closeQuickStatusModal === 'function') closeQuickStatusModal();
+                if (typeof closePlantSeedModal === 'function') closePlantSeedModal();
+                if (typeof closeFarmLogModal === 'function') closeFarmLogModal();
+                if (typeof closeWalletModal === 'function') closeWalletModal();
+                if (typeof closeInstallAppModal === 'function') closeInstallAppModal();
             }
         }
 
@@ -5757,7 +5765,7 @@ CÁC NGUYÊN TẮC VÀNG ĐỂ TRÒ CHUYỆN THẬT TỰ NHIÊN (RẤT QUAN TR�
             }
 
             document.getElementById('avatarEditModal').classList.add('active');
-            if (window.lucide && lucide.createIcons) lucide.createIcons();
+            if (typeof lucide !== "undefined" && lucide && lucide.createIcons) lucide.createIcons();
 
             if (focusTarget === 'name' && nameInput) {
                 setTimeout(() => {
