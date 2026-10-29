@@ -4323,6 +4323,9 @@ CÁC NGUYÊN TẮC VÀNG ĐỂ TRÒ CHUYỆN THẬT TỰ NHIÊN (RẤT QUAN TR�
 
         function openNotifModal() {
             updateNotifStatusUI();
+            if (typeof initRemindersConfig === 'function') {
+                initRemindersConfig();
+            }
             document.getElementById('notifModal').classList.add('active');
         }
 
@@ -4388,17 +4391,76 @@ CÁC NGUYÊN TẮC VÀNG ĐỂ TRÒ CHUYỆN THẬT TỰ NHIÊN (RẤT QUAN TR�
             }
         }
 
-        // Hàm phát thông báo Native chuẩn PWA (chạy mượt ngoài Lock Screen & Thanh thông báo điện thoại)
+        let globalAudioCtx = null;
+        function getNotificationAudioCtx() {
+            try {
+                if (!globalAudioCtx) {
+                    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+                    if (AudioContextClass) globalAudioCtx = new AudioContextClass();
+                }
+                if (globalAudioCtx && globalAudioCtx.state === 'suspended') {
+                    globalAudioCtx.resume().catch(() => {});
+                }
+            } catch(e) {}
+            return globalAudioCtx;
+        }
+
+        // Âm thanh chuông Ding-Dong Mochi du dương êm ái
+        function playNotificationChime() {
+            try {
+                const ctx = getNotificationAudioCtx();
+                if (!ctx) return;
+                const now = ctx.currentTime;
+                // Giai điệu Ding - Dong - Ting (F5 698Hz, A5 880Hz, C6 1046Hz)
+                const melody = [
+                    { freq: 698.46, time: 0.00, dur: 0.30, gain: 0.22 },
+                    { freq: 880.00, time: 0.12, dur: 0.35, gain: 0.25 },
+                    { freq: 1046.50, time: 0.25, dur: 0.60, gain: 0.28 }
+                ];
+                melody.forEach(item => {
+                    const osc = ctx.createOscillator();
+                    const gainNode = ctx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(item.freq, now + item.time);
+                    gainNode.gain.setValueAtTime(0, now + item.time);
+                    gainNode.gain.linearRampToValueAtTime(item.gain, now + item.time + 0.02);
+                    gainNode.gain.exponentialRampToValueAtTime(0.0001, now + item.time + item.dur);
+                    osc.connect(gainNode);
+                    gainNode.connect(ctx.destination);
+                    osc.start(now + item.time);
+                    osc.stop(now + item.time + item.dur);
+                });
+            } catch(e) {
+                console.warn("Chime error:", e);
+            }
+        }
+
+        // Mở khóa AudioContext khi người dùng chạm màn hình lần đầu
+        if (typeof window !== 'undefined') {
+            ['touchstart', 'touchend', 'click', 'keydown'].forEach(evt => {
+                window.addEventListener(evt, () => getNotificationAudioCtx(), { once: true, passive: true });
+            });
+        }
+
+        // Hàm phát thông báo Native chuẩn PWA & iOS Safari (chuông Ding-Dong + Rung + Dynamic Banner + Màn hình khóa)
         async function dispatchPushNotification(title, body, forceOS = false) {
             const isAppVisible = document.visibilityState === 'visible' && !document.hidden;
 
-            // 1. Khi đang MỞ TRỰC TIẾP APP: Chỉ hiện Dynamic Island Banner trong app, không bắn thông báo máy để tránh bị 2 thông báo đè nhau
-            if (isAppVisible && !forceOS) {
-                showDynamicIslandBanner(title, body);
-                return;
+            // 1. Luôn phát chuông Ding-Dong êm ái
+            playNotificationChime();
+
+            // 2. Luôn rung thiết bị nếu hỗ trợ
+            if (typeof navigator !== 'undefined' && navigator.vibrate) {
+                try { navigator.vibrate([120, 80, 180, 80, 240]); } catch(e) {}
             }
 
-            // 2. Khi đã THOÁT APP, TẮT MÀN HÌNH (hoặc khi bấm Thử chuông máy): Bắn thông báo đẩy hệ điều hành của điện thoại
+            // 3. Luôn hiện Dynamic Island Banner và Toast trong app khi app đang mở
+            if (isAppVisible) {
+                showDynamicIslandBanner(title, body);
+                showCuteToast(`${title} ${body}`, "🔔");
+            }
+
+            // 4. Luôn phát thông báo hệ thống ra Màn hình khóa / Thanh thông báo điện thoại
             if ("Notification" in window && Notification.permission === "granted") {
                 try {
                     if ('serviceWorker' in navigator) {
@@ -4408,7 +4470,7 @@ CÁC NGUYÊN TẮC VÀNG ĐỂ TRÒ CHUYỆN THẬT TỰ NHIÊN (RẤT QUAN TR�
                                 body: body,
                                 icon: "./images/mochi-192.png",
                                 badge: "./images/mochi-badge-72.png",
-                                vibrate: [150, 80, 150, 80, 250],
+                                vibrate: [120, 80, 180, 80, 240],
                                 tag: "love-space-" + Date.now(),
                                 renotify: true,
                                 actions: [
@@ -4427,8 +4489,6 @@ CÁC NGUYÊN TẮC VÀNG ĐỂ TRÒ CHUYỆN THẬT TỰ NHIÊN (RẤT QUAN TR�
                 } catch(e) {
                     console.warn("Lỗi gửi push notification:", e);
                 }
-            } else if (isAppVisible) {
-                showDynamicIslandBanner(title, body);
             }
         }
 
@@ -6283,6 +6343,15 @@ CÁC NGUYÊN TẮC VÀNG ĐỂ TRÒ CHUYỆN THẬT TỰ NHIÊN (RẤT QUAN TR�
             }
         };
 
+        try {
+            const savedReminders = localStorage.getItem('LOVE_REMINDERS_DATA_DUO');
+            if (savedReminders) {
+                const parsed = JSON.parse(savedReminders);
+                if (parsed.boy) remindersData.boy = { ...remindersData.boy, ...parsed.boy };
+                if (parsed.girl) remindersData.girl = { ...remindersData.girl, ...parsed.girl };
+            }
+        } catch(e) {}
+
         const TIMEZONE_CONFIG = {
             'Asia/Ho_Chi_Minh': { flag: '🇻🇳', label: 'Việt Nam (GMT+7)', city: 'Hà Nội / TP.HCM' },
             'Europe/Berlin': { flag: '🇩🇪', label: 'Đức (Berlin GMT+1/2)', city: 'Berlin (Đức)' },
@@ -6390,12 +6459,15 @@ CÁC NGUYÊN TẮC VÀNG ĐỂ TRÒ CHUYỆN THẬT TỰ NHIÊN (RẤT QUAN TR�
                 const saved = localStorage.getItem('LOVE_REMINDERS_DATA_DUO');
                 if (saved) {
                     const parsed = JSON.parse(saved);
-                    remindersData.boy = { ...remindersData.boy, ...parsed.boy };
-                    remindersData.girl = { ...remindersData.girl, ...parsed.girl };
+                    if (parsed.boy) remindersData.boy = { ...remindersData.boy, ...parsed.boy };
+                    if (parsed.girl) remindersData.girl = { ...remindersData.girl, ...parsed.girl };
                 }
             } catch(e) {}
 
-            currentReminderTarget = myRole === 'Em' ? 'boy' : 'girl';
+            if (!currentReminderTarget) {
+                currentReminderTarget = myRole === 'Em' ? 'girl' : 'boy';
+            }
+            switchReminderTarget(currentReminderTarget);
             syncRemindersToUI();
             updateDualClocks();
         }
@@ -6638,6 +6710,12 @@ CÁC NGUYÊN TẮC VÀNG ĐỂ TRÒ CHUYỆN THẬT TỰ NHIÊN (RẤT QUAN TR�
             data.updatedAt = Date.now();
 
             localStorage.setItem('LOVE_REMINDERS_DATA_DUO', JSON.stringify(remindersData));
+            if (typeof syncFieldToFirebase === 'function') {
+                syncFieldToFirebase('reminders', remindersData);
+            }
+            if (typeof checkAllScheduledReminders === 'function') {
+                checkAllScheduledReminders();
+            }
         }
 
         function addNewCustomReminder() {
@@ -6662,6 +6740,9 @@ CÁC NGUYÊN TẮC VÀNG ĐỂ TRÒ CHUYỆN THẬT TỰ NHIÊN (RẤT QUAN TR�
             syncFieldToFirebase('reminders', remindersData);
             renderCustomRemindersList();
             showCuteToast("Đã thêm lời nhắc mới! ✨", "⏰");
+            if (typeof checkAllScheduledReminders === 'function') {
+                checkAllScheduledReminders();
+            }
         }
 
         function deleteCustomReminder(id) {
@@ -6690,23 +6771,27 @@ CÁC NGUYÊN TẮC VÀNG ĐỂ TRÒ CHUYỆN THẬT TỰ NHIÊN (RẤT QUAN TR�
             if (type === 'water') {
                 dispatchPushNotification(
                     `💧 Lời Nhắc Từ ${senderName}:`,
-                    `Nhớ uống một ngụm nước ấm cho cơ thể khỏe khoắn và da dẻ hồng hào nha! 💧✨`
+                    `Nhớ uống một ngụm nước ấm cho cơ thể khỏe khoắn và da dẻ hồng hào nha! 💧✨`,
+                    true
                 );
             } else if (type === 'meals') {
                 dispatchPushNotification(
                     `🍚 Lời Nhắc Từ ${senderName}:`,
-                    `Đến giờ ăn cơm rồi nè! Nhớ ăn uống đầy đủ no bụng, không được bỏ bữa đâu đấy nhé! 🥢💖`
+                    `Đến giờ ăn cơm rồi nè! Nhớ ăn uống đầy đủ no bụng, không được bỏ bữa đâu đấy nhé! 🥢💖`,
+                    true
                 );
             } else if (type === 'medicine') {
                 const mName = data.medicine.medName || "Vitamin & Thuốc bổ";
                 dispatchPushNotification(
                     `💊 Lời Nhắc Từ ${senderName}:`,
-                    `Đến cữ uống [${mName}] rồi nè! Uống thuốc đúng giờ để luôn mạnh khỏe nha! 🌸`
+                    `Đến cữ uống [${mName}] rồi nè! Uống thuốc đúng giờ để luôn mạnh khỏe nha! 🌸`,
+                    true
                 );
             } else if (type === 'sleep') {
                 dispatchPushNotification(
                     `🌙 Lời Nhắn Từ ${senderName}:`,
-                    `Đã khuya rồi, tắt điện thoại và ngủ một giấc thật sâu nha! Chúc bạn yêu ngủ thật ngon! 💤✨`
+                    `Đã khuya rồi, tắt điện thoại và ngủ một giấc thật sâu nha! Chúc bạn yêu ngủ thật ngon! 💤✨`,
+                    true
                 );
             }
         }
@@ -6716,7 +6801,7 @@ CÁC NGUYÊN TẮC VÀNG ĐỂ TRÒ CHUYỆN THẬT TỰ NHIÊN (RẤT QUAN TR�
             const item = (data.custom || []).find(c => c.id === id);
             if (!item) return;
             const senderName = currentReminderTarget === 'boy' ? (userNames.girl || 'Em yêu') : (userNames.boy || 'Anh yêu');
-            dispatchPushNotification(`⏰ Lời Nhắc Từ ${senderName}:`, item.title);
+            dispatchPushNotification(`⏰ Lời Nhắc Từ ${senderName}:`, item.title, true);
         }
 
         function sendRemoteBuzzAlert(type) {
@@ -6843,68 +6928,216 @@ CÁC NGUYÊN TẮC VÀNG ĐỂ TRÒ CHUYỆN THẬT TỰ NHIÊN (RẤT QUAN TR�
 
         setInterval(updateDualClocks, 1000);
 
-        // BỘ KIỂM TRA LỜI NHẮC HÀNG PHÚT DÀNH CHO MÁY CỦA TÔI (THEO MÚI GIỜ CỦA TÔI)
-        setInterval(() => {
-            // Tự động kiểm tra và reset lượng nước khi sang ngày mới
+        // =========================================================================
+        // HỆ THỐNG KIỂM TRA LỜI NHẮC TOÀN DIỆN & TỰ ĐỘNG BÙ THÔNG BÁO KHI MỞ MÁY
+        // =========================================================================
+        function parseTimeToMinutes(timeStr) {
+            if (!timeStr || typeof timeStr !== 'string' || !timeStr.includes(':')) return -1;
+            const parts = timeStr.trim().split(':');
+            const h = parseInt(parts[0], 10);
+            const m = parseInt(parts[1], 10);
+            if (isNaN(h) || isNaN(m)) return -1;
+            return h * 60 + m;
+        }
+
+        // Kiểm tra xem lời nhắc có đến hạn không:
+        // - So khớp cả giờ Local (máy điện thoại đang cầm) và giờ Timezone (nếu cài theo giờ đối phương)
+        // - Cửa sổ bắt bù 45 phút: Nếu điện thoại bị khóa màn hình hoặc Safari đóng băng JS,
+        //   ngay khi mở khóa / mở app lại, lời nhắc trong vòng 45 phút trước đó sẽ được kích hoạt bù ngay lập tức!
+        function checkReminderDue(scheduledTime, targetTz, firedId) {
+            if (!scheduledTime) return { isDue: false, firedKey: '' };
+            const schedMin = parseTimeToMinutes(scheduledTime);
+            if (schedMin < 0) return { isDue: false, firedKey: '' };
+
+            const now = new Date();
+
+            // 1. Giờ máy Local (giờ thực tế hiển thị trên đồng hồ điện thoại)
+            const localMin = now.getHours() * 60 + now.getMinutes();
+            const localToday = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
+            let diffLocal = localMin - schedMin;
+            if (diffLocal < -1300) diffLocal += 1440; // Xuyên đêm (ví dụ 23:55 -> 00:05)
+
+            const localFiredKey = `REMINDER_FIRED_${firedId}_${localToday}`;
+            const isLocalFired = localStorage.getItem(localFiredKey);
+
+            if (diffLocal >= 0 && diffLocal <= 45 && !isLocalFired) {
+                return { isDue: true, firedKey: localFiredKey, todayStr: localToday };
+            }
+
+            // 2. Giờ theo Timezone cài đặt (ví dụ giờ Berlin / London / Tokyo)
+            if (targetTz) {
+                try {
+                    const tzTimeStr = getTimeInTimezone(targetTz, now);
+                    const tzMin = parseTimeToMinutes(tzTimeStr);
+                    const tzToday = new Intl.DateTimeFormat('en-CA', { timeZone: targetTz }).format(now);
+                    let diffTz = tzMin - schedMin;
+                    if (diffTz < -1300) diffTz += 1440;
+
+                    const tzFiredKey = `REMINDER_FIRED_${firedId}_${tzToday}`;
+                    const isTzFired = localStorage.getItem(tzFiredKey);
+
+                    if (diffTz >= 0 && diffTz <= 45 && !isTzFired) {
+                        return { isDue: true, firedKey: tzFiredKey, todayStr: tzToday };
+                    }
+                } catch(e) {}
+            }
+
+            return { isDue: false, firedKey: '' };
+        }
+
+        function markReminderFired(firedKey, dataObj, datePropName, todayStr) {
+            if (firedKey) {
+                try {
+                    localStorage.setItem(firedKey, '1');
+                } catch(e) {}
+            }
+            if (dataObj && datePropName && todayStr) {
+                dataObj[datePropName] = todayStr;
+            }
+        }
+
+        function checkAllScheduledReminders() {
+            // 1. Tự động kiểm tra và reset lượng nước khi sang ngày mới
             if (typeof checkAndResetDailyWater === 'function') {
                 checkAndResetDailyWater();
                 updateWaterDisplay();
             }
-            const myTarget = myRole === 'Anh' ? 'boy' : 'girl';
-            const myReminders = remindersData[myTarget] || remindersData.boy;
-            const myTz = myReminders.timezone || (myRole === 'Anh' ? 'Asia/Ho_Chi_Minh' : 'Europe/Berlin');
 
-            // Tính thời gian hiện tại chuẩn xác theo đúng múi giờ của người này
-            const curTime = getTimeInTimezone(myTz);
-            const now = new Date();
-            const todayStr = new Intl.DateTimeFormat('en-CA', { timeZone: myTz }).format(now); // YYYY-MM-DD
-            const partnerName = myRole === 'Anh' ? (userNames.girl || 'Em yêu') : (userNames.boy || 'Anh yêu');
+            if (!remindersData) return;
 
-            // 1. Nhắc bữa ăn
-            if (myReminders.meals.enabled) {
-                if (curTime === myReminders.meals.breakfast && myReminders.meals.lastBreakfastDate !== todayStr) {
-                    myReminders.meals.lastBreakfastDate = todayStr;
-                    dispatchPushNotification(`🍚 Lời Nhắc Bữa Sáng:`, `${partnerName} dặn bạn nhớ ăn sáng đầy đủ nạp năng lượng nha! 🥢`);
-                } else if (curTime === myReminders.meals.lunch && myReminders.meals.lastLunchDate !== todayStr) {
-                    myReminders.meals.lastLunchDate = todayStr;
-                    dispatchPushNotification(`🍚 Lời Nhắc Bữa Trưa:`, `${partnerName} nhắc: Đến giờ ăn trưa rồi, mau nghỉ tay đi ăn cơm nha! 🍱`);
-                } else if (curTime === myReminders.meals.dinner && myReminders.meals.lastDinnerDate !== todayStr) {
-                    myReminders.meals.lastDinnerDate = todayStr;
-                    dispatchPushNotification(`🍚 Lời Nhắc Bữa Tối:`, `${partnerName} dặn bạn ăn tối ngon miệng và thư giãn nhé! 🍲`);
-                }
-            }
+            // 2. Quét TẤT CẢ lời nhắc của cả 'boy' và 'girl' để không bao giờ bị sót lời nhắc
+            const rolesToCheck = ['boy', 'girl'];
 
-            // 2. Nhắc thuốc & vitamin
-            if (myReminders.medicine.enabled) {
-                const med = myReminders.medicine.medName || "Vitamin & Thuốc bổ";
-                if (curTime === myReminders.medicine.morning && myReminders.medicine.lastMornDate !== todayStr) {
-                    myReminders.medicine.lastMornDate = todayStr;
-                    dispatchPushNotification(`💊 Cữ Thuốc Sáng:`, `${partnerName} nhắc: Mau uống [${med}] cữ sáng nha bạn yêu! 🌸`);
-                } else if (curTime === (myReminders.medicine.noon || "12:30") && myReminders.medicine.lastNoonDate !== todayStr) {
-                    myReminders.medicine.lastNoonDate = todayStr;
-                    dispatchPushNotification(`💊 Cữ Thuốc Trưa:`, `${partnerName} nhắc: Ăn cơm xong nhớ uống [${med}] cữ trưa nha! ☀️`);
-                } else if (curTime === myReminders.medicine.night && myReminders.medicine.lastNightDate !== todayStr) {
-                    myReminders.medicine.lastNightDate = todayStr;
-                    dispatchPushNotification(`💊 Cữ Thuốc Tối:`, `${partnerName} nhắc: Uống [${med}] cữ tối rồi chuẩn bị nghỉ ngơi nha! 🌙`);
-                }
-            }
+            rolesToCheck.forEach(roleKey => {
+                const data = remindersData[roleKey];
+                if (!data) return;
 
-            // 3. Nhắc đi ngủ
-            if (myReminders.sleep.enabled && curTime === myReminders.sleep.sleepTime && myReminders.sleep.lastSleepDate !== todayStr) {
-                myReminders.sleep.lastSleepDate = todayStr;
-                dispatchPushNotification(`🌙 Lời Chúc Ngủ Ngon:`, `${partnerName} gửi ngàn nụ hôn: Khuya rồi, đi ngủ sớm cho khỏe đẹp nha bạn yêu! 💤✨`);
-            }
+                const targetTz = data.timezone || (roleKey === 'boy' ? 'Asia/Ho_Chi_Minh' : 'Europe/Berlin');
+                const isMyTarget = (myRole === 'Anh' && roleKey === 'boy') || (myRole === 'Em' && roleKey === 'girl');
+                const targetName = roleKey === 'boy' ? (userNames.boy || 'Anh') : (userNames.girl || 'Em');
+                const partnerName = roleKey === 'boy' ? (userNames.girl || 'Em yêu') : (userNames.boy || 'Anh yêu');
+                const targetNote = isMyTarget ? "" : ` (${targetName})`;
 
-            // 4. Lời nhắc tự thêm
-            if (Array.isArray(myReminders.custom)) {
-                myReminders.custom.forEach(item => {
-                    if (item.enabled && curTime === item.time && item.lastDate !== todayStr) {
-                        item.lastDate = todayStr;
-                        dispatchPushNotification(`⏰ Lời Nhắc Yêu Thương:`, `${partnerName} nhắn: ${item.title}`);
+                // 2a. Nhắc bữa ăn
+                if (data.meals && data.meals.enabled) {
+                    const m = data.meals;
+                    const rB = checkReminderDue(m.breakfast, targetTz, `${roleKey}_breakfast`);
+                    if (rB.isDue) {
+                        markReminderFired(rB.firedKey, m, 'lastBreakfastDate', rB.todayStr);
+                        dispatchPushNotification(
+                            `🍚 Lời Nhắc Bữa Sáng${targetNote}:`,
+                            `${partnerName} dặn bạn nhớ ăn sáng đầy đủ nạp năng lượng nha! 🥢`,
+                            true
+                        );
                     }
-                });
-            }
-        }, 60000);
+                    const rL = checkReminderDue(m.lunch, targetTz, `${roleKey}_lunch`);
+                    if (rL.isDue) {
+                        markReminderFired(rL.firedKey, m, 'lastLunchDate', rL.todayStr);
+                        dispatchPushNotification(
+                            `🍚 Lời Nhắc Bữa Trưa${targetNote}:`,
+                            `${partnerName} nhắc: Đến giờ ăn trưa rồi, mau nghỉ tay đi ăn cơm nha! 🍱`,
+                            true
+                        );
+                    }
+                    const rD = checkReminderDue(m.dinner, targetTz, `${roleKey}_dinner`);
+                    if (rD.isDue) {
+                        markReminderFired(rD.firedKey, m, 'lastDinnerDate', rD.todayStr);
+                        dispatchPushNotification(
+                            `🍚 Lời Nhắc Bữa Tối${targetNote}:`,
+                            `${partnerName} dặn bạn ăn tối ngon miệng và thư giãn nhé! 🍲`,
+                            true
+                        );
+                    }
+                }
+
+                // 2b. Nhắc uống thuốc & vitamin
+                if (data.medicine && data.medicine.enabled) {
+                    const med = data.medicine;
+                    const medName = med.medName || "Vitamin & Thuốc bổ";
+                    const rMorn = checkReminderDue(med.morning, targetTz, `${roleKey}_med_morn`);
+                    if (rMorn.isDue) {
+                        markReminderFired(rMorn.firedKey, med, 'lastMornDate', rMorn.todayStr);
+                        dispatchPushNotification(
+                            `💊 Cữ Thuốc Sáng${targetNote}:`,
+                            `${partnerName} nhắc: Mau uống [${medName}] cữ sáng nha bạn yêu! 🌸`,
+                            true
+                        );
+                    }
+                    const rNoon = checkReminderDue(med.noon || "12:30", targetTz, `${roleKey}_med_noon`);
+                    if (rNoon.isDue) {
+                        markReminderFired(rNoon.firedKey, med, 'lastNoonDate', rNoon.todayStr);
+                        dispatchPushNotification(
+                            `💊 Cữ Thuốc Trưa${targetNote}:`,
+                            `${partnerName} nhắc: Ăn cơm xong nhớ uống [${medName}] cữ trưa nha! ☀️`,
+                            true
+                        );
+                    }
+                    const rNight = checkReminderDue(med.night, targetTz, `${roleKey}_med_night`);
+                    if (rNight.isDue) {
+                        markReminderFired(rNight.firedKey, med, 'lastNightDate', rNight.todayStr);
+                        dispatchPushNotification(
+                            `💊 Cữ Thuốc Tối${targetNote}:`,
+                            `${partnerName} nhắc: Uống [${medName}] cữ tối rồi chuẩn bị nghỉ ngơi nha! 🌙`,
+                            true
+                        );
+                    }
+                }
+
+                // 2c. Nhắc đi ngủ
+                if (data.sleep && data.sleep.enabled) {
+                    const s = data.sleep;
+                    const rSleep = checkReminderDue(s.sleepTime, targetTz, `${roleKey}_sleep`);
+                    if (rSleep.isDue) {
+                        markReminderFired(rSleep.firedKey, s, 'lastSleepDate', rSleep.todayStr);
+                        dispatchPushNotification(
+                            `🌙 Lời Chúc Ngủ Ngon${targetNote}:`,
+                            `${partnerName} gửi ngàn nụ hôn: Khuya rồi, đi ngủ sớm cho khỏe đẹp nha bạn yêu! 💤✨`,
+                            true
+                        );
+                    }
+                }
+
+                // 2d. Lời nhắc riêng tự đặt (Custom Reminders)
+                if (Array.isArray(data.custom)) {
+                    data.custom.forEach(item => {
+                        if (item && item.enabled && item.time) {
+                            const rCustom = checkReminderDue(item.time, targetTz, `${roleKey}_custom_${item.id}`);
+                            if (rCustom.isDue) {
+                                markReminderFired(rCustom.firedKey, item, 'lastDate', rCustom.todayStr);
+                                dispatchPushNotification(
+                                    `⏰ Lời Nhắc Yêu Thương${targetNote}:`,
+                                    `${partnerName} nhắn: ${item.title}`,
+                                    true
+                                );
+                            }
+                        }
+                    });
+                }
+            });
+        }
+
+        // Tần suất quét: mỗi 10 giây một lần (nhanh gấp 6 lần cũ để không trễ phút)
+        setInterval(checkAllScheduledReminders, 10000);
+
+        // KÍCH HOẠT QUÉT BÙ THÔNG BÁO NGAY LẬP TỨC KHI MỞ MÀN HÌNH HOẶC TRUY CẬP LẠI APP
+        if (typeof document !== 'undefined') {
+            document.addEventListener('visibilitychange', () => {
+                if (document.visibilityState === 'visible') {
+                    checkAllScheduledReminders();
+                }
+            });
+        }
+        if (typeof window !== 'undefined') {
+            window.addEventListener('focus', () => {
+                checkAllScheduledReminders();
+            });
+        }
+
+        // Khởi động kiểm tra ngay khi nạp trang
+        setTimeout(() => {
+            if (typeof initRemindersConfig === 'function') initRemindersConfig();
+            checkAllScheduledReminders();
+        }, 1500);
 
         // =========================================
         // CÂY TÌNH YÊU COOLDOWN ENGINE
